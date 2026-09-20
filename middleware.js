@@ -7,8 +7,9 @@ import { NextResponse } from "next/server";
    components below don't get to skip it just because a link is
    hidden in the UI. */
 export async function middleware(request) {
-  // Public, unauthenticated intake endpoint — never gated behind admin login.
-  if (request.nextUrl.pathname.startsWith("/api/apply")) {
+  // Public, unauthenticated routes — never gated behind admin login.
+  // /join is how someone without an account yet gets one.
+  if (request.nextUrl.pathname.startsWith("/api/apply") || request.nextUrl.pathname.startsWith("/join")) {
     return NextResponse.next();
   }
 

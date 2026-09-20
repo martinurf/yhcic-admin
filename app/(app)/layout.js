@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "./actions";
 import NavLink from "./nav-link";
+import MobileNav from "./mobile-nav";
 
 const NAV = [
   { href: "/", label: "Dashboard" },
@@ -9,6 +10,7 @@ const NAV = [
   { href: "/content/projects", label: "Projects", disabled: true },
   { href: "/content/goals", label: "Goals", disabled: true },
   { href: "/content/members", label: "Members" },
+  { href: "/team", label: "Team" },
 ];
 
 export default async function AppLayout({ children }) {
@@ -29,6 +31,8 @@ export default async function AppLayout({ children }) {
 
   return (
     <div className="shell">
+      <MobileNav nav={NAV} profile={profile} onSignOut={signOut} />
+
       <aside className="side">
         <span className="side__mark">YHCIC</span>
         <p className="side__meta">Admin panel</p>

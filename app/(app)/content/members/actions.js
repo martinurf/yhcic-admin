@@ -14,7 +14,7 @@ export async function saveMember(id, formData) {
     linkedin: String(formData.get("linkedin") || "").trim() || null,
     published: formData.get("published") === "on",
   };
-  if (!data.name || !data.role) return { error: "Name and role are required." };
+  if (!data.name) return { error: "Name is required." };
   if (data.linkedin && !/^https:\/\/.+\..+/.test(data.linkedin)) {
     return { error: "LinkedIn must be a full https:// URL." };
   }

@@ -38,8 +38,8 @@ export default function MemberForm({ member }) {
           <input id="name" name="name" type="text" defaultValue={member?.name} required />
         </div>
         <div className="fld">
-          <label htmlFor="role">Role</label>
-          <input id="role" name="role" type="text" placeholder="President" defaultValue={member?.role} required />
+          <label htmlFor="role">Role <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional</em></label>
+          <input id="role" name="role" type="text" placeholder="President" defaultValue={member?.role} />
         </div>
       </div>
       <div className="form__row">
