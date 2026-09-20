@@ -63,6 +63,67 @@ export async function uploadResource(formData) {
   return { ok: true };
 }
 
+export async function updateResource(id, formData) {
+  const admin = await requireActiveAdmin();
+  if (!admin) return { error: "Not signed in." };
+
+  const ALLOWED_TYPES = ["ARTICLE", "DATA", "FILINGS", "DOCUMENT", "NOTE"];
+  const supabase = createAdminClient();
+
+  const { data: resource } = await supabase.from("resources").select("uploaded_by, forked_from_id, storage_key").eq("id", id).maybeSingle();
+  if (!resource) return { error: "Not found." };
+  if (resource.forked_from_id && resource.uploaded_by !== admin.id) return { error: "Only whoever made this copy can edit it." };
+
+  const title = String(formData.get("title") || "").trim();
+  const description = String(formData.get("description") || "").trim() || null;
+  const type = ALLOWED_TYPES.includes(formData.get("type")) ? formData.get("type") : "NOTE";
+  const rawUrl = String(formData.get("url") || "").trim();
+
+  if (!title) return { error: "Title is required." };
+
+  let url = null;
+  if (rawUrl) {
+    try {
+      const parsed = new URL(rawUrl);
+      if (!["http:", "https:"].includes(parsed.protocol)) throw new Error();
+      url = parsed.href;
+    } catch {
+      return { error: "That link doesn't look valid." };
+    }
+  }
+  if (!url && !resource.storage_key) return { error: "Add a link or a file." };
+
+  const { error } = await supabase.from("resources").update({ title, description, type, url }).eq("id", id);
+  if (error) return { error: "Could not save changes." };
+
+  revalidatePath("/content/sources");
+  return { ok: true };
+}
+
+/* "Make a copy" — same idea as projects: an instant, visible working
+   copy, editable only by whoever made it. */
+export async function forkResource(id) {
+  const admin = await requireActiveAdmin();
+  if (!admin) return { error: "Not signed in." };
+
+  const supabase = createAdminClient();
+  const { data: source } = await supabase.from("resources").select("title, description, type, url").eq("id", id).maybeSingle();
+  if (!source) return { error: "Not found." };
+
+  const { error } = await supabase.from("resources").insert({
+    title: source.title,
+    description: source.description,
+    type: source.type,
+    url: source.url,
+    forked_from_id: id,
+    uploaded_by: admin.id,
+  });
+  if (error) return { error: error.message };
+
+  revalidatePath("/content/sources");
+  return { ok: true };
+}
+
 export async function deleteResource(id, storageKey) {
   const admin = await requireActiveAdmin();
   if (!admin) return { error: "Not signed in." };

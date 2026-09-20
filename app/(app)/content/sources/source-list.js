@@ -5,7 +5,7 @@ import ResourceRow from "./resource-row";
 
 const TYPES = ["ARTICLE", "DATA", "FILINGS", "DOCUMENT", "NOTE"];
 
-export default function SourceList({ resources }) {
+export default function SourceList({ resources, commentsByResource, originTitleById, me }) {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("");
 
@@ -46,7 +46,15 @@ export default function SourceList({ resources }) {
             {resources.length ? "No sources match that search." : "Add the first article, dataset, or note."}
           </p>
         ) : (
-          filtered.map((r) => <ResourceRow key={r.id} resource={r} />)
+          filtered.map((r) => (
+            <ResourceRow
+              key={r.id}
+              resource={r}
+              comments={commentsByResource[r.id] || []}
+              originTitle={r.forked_from_id ? originTitleById[r.forked_from_id] : null}
+              canEdit={Boolean(me) && (!r.forked_from_id || r.uploaded_by === me.id)}
+            />
+          ))
         )}
       </div>
     </>

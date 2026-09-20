@@ -13,14 +13,26 @@ export default async function SourcesPage() {
 
   const admin = createAdminClient();
   const supabase = await createClient();
-  const [{ data: resources }, { count: pendingCount }] = await Promise.all([
+  const [{ data: resources }, { count: pendingCount }, { data: comments }] = await Promise.all([
     admin
       .from("resources")
-      .select("id, title, description, type, url, file_name, file_size, storage_key, created_at")
+      .select("id, title, description, type, url, file_name, file_size, storage_key, created_at, uploaded_by, forked_from_id, uploader:admin_profiles!uploaded_by(display_name, username)")
       .is("deleted_at", null)
       .order("created_at", { ascending: false }),
     supabase.from("applications").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    supabase
+      .from("content_comments")
+      .select("id, parent_id, body, created_at, author:admin_profiles!author_id(display_name, username)")
+      .eq("parent_table", "resources")
+      .is("deleted_at", null)
+      .order("created_at", { ascending: true }),
   ]);
+
+  const commentsByResource = {};
+  for (const c of comments || []) {
+    (commentsByResource[c.parent_id] ||= []).push(c);
+  }
+  const originTitleById = Object.fromEntries((resources || []).map((r) => [r.id, r.title]));
 
   return (
     <>
@@ -45,7 +57,7 @@ export default async function SourcesPage() {
             <UploadForm />
           </div>
 
-          <SourceList resources={resources || []} />
+          <SourceList resources={resources || []} commentsByResource={commentsByResource} originTitleById={originTitleById} me={me} />
         </div>
       </div>
     </>
