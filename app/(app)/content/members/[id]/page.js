@@ -45,19 +45,26 @@ export default async function MemberDetailPage({ params, searchParams }) {
             </span>
           )}
         </span>
-        <span className="leadership-card__info">
-          <span className="leadership-card__name">{member.name}</span>
-          {member.role ? <span className="leadership-card__role">{member.role}</span> : <span className="leadership-card__add">No role yet</span>}
-          {member.major ? (
-            <>
-              <span className="leadership-card__field-label">Major</span>
-              <span className="leadership-card__field">{member.major}</span>
-            </>
-          ) : null}
-          {member.class_of ? <span className="leadership-card__class">Class of {member.class_of}</span> : null}
-          {member.team ? <span className="leadership-card__class">{member.team}</span> : null}
-          {member.focus ? <span className="leadership-card__field">{member.focus}</span> : null}
-          {member.phone ? <span className="leadership-card__field">{member.phone}</span> : null}
+        <span className="leadership-card__content">
+          <span className="leadership-card__info">
+            <span className="leadership-card__name">{member.name}</span>
+            {member.role ? <span className="leadership-card__role">{member.role}</span> : <span className="leadership-card__add">No role yet</span>}
+            {member.major ? (
+              <>
+                <span className="leadership-card__field-label">Major</span>
+                <span className="leadership-card__field">{member.major}</span>
+              </>
+            ) : null}
+            {member.class_of ? <span className="leadership-card__class">Class of {member.class_of}</span> : null}
+            {member.team ? <span className="leadership-card__class">{member.team}</span> : null}
+            {member.focus ? <span className="leadership-card__field">{member.focus}</span> : null}
+            {member.phone ? <span className="leadership-card__field">{member.phone}</span> : null}
+          </span>
+          <span className="leadership-card__tagline">
+            <em>Students.</em>
+            <em>Markets.</em>
+            <em>A Stronger Tomorrow.</em>
+          </span>
         </span>
       </span>
 

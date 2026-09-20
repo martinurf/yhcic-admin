@@ -45,22 +45,21 @@ export default async function MembersListPage() {
     <>
       <ContentTopbar title="Member Network" pendingCount={pendingCount || 0} />
       <div className="container flush-top" style={{ paddingLeft: 0, paddingRight: 0 }}>
-        <section className="content-hero">
-          <img className="content-hero__art" src="/college-lineart.webp" alt="" aria-hidden="true" />
+        <section className="members-hero">
+          <img className="members-hero__art" src="/college-lineart.webp" alt="" aria-hidden="true" />
           <h1>
             <span>Built by</span>
             <span>students.</span>
           </h1>
           <div className="hero-rule" />
           <p className="sub">Investment club / 2026</p>
-        </section>
-
-        <div className="workspace">
-          <div className="section-toolbar members-toolbar">
+          <div className="section-toolbar members-toolbar members-hero__leadership-row">
             <h2>Leadership</h2>
             <Link href="#all-members" className="text-btn">View all &rarr;</Link>
           </div>
+        </section>
 
+        <div className="workspace">
           {myMember ? (
             <Link href={`/content/members/${myMember.id}`} className="leadership-card">
               <span className="leadership-card__arrow" aria-hidden="true">
@@ -75,29 +74,31 @@ export default async function MembersListPage() {
                   </span>
                 )}
               </span>
-              <span className="leadership-card__info">
-                <span className="leadership-card__name">{myMember.name}</span>
-                {myMember.role ? (
-                  <span className="leadership-card__role">{myMember.role}</span>
-                ) : (
-                  <span className="leadership-card__add">Add role</span>
-                )}
-                <span className="leadership-card__field-label">Major</span>
-                {myMember.major ? (
-                  <span className="leadership-card__field">{myMember.major}</span>
-                ) : (
-                  <span className="leadership-card__add">Add major</span>
-                )}
-                {myMember.class_of ? (
-                  <span className="leadership-card__class">Class of {myMember.class_of}</span>
-                ) : (
-                  <span className="leadership-card__add">Add class year</span>
-                )}
-              </span>
-              <span className="leadership-card__tagline">
-                <em>Students.</em>
-                <em>Markets.</em>
-                <em>A Stronger Tomorrow.</em>
+              <span className="leadership-card__content">
+                <span className="leadership-card__info">
+                  <span className="leadership-card__name">{myMember.name}</span>
+                  {myMember.role ? (
+                    <span className="leadership-card__role">{myMember.role}</span>
+                  ) : (
+                    <span className="leadership-card__add">Add role</span>
+                  )}
+                  <span className="leadership-card__field-label">Major</span>
+                  {myMember.major ? (
+                    <span className="leadership-card__field">{myMember.major}</span>
+                  ) : (
+                    <span className="leadership-card__add">Add major</span>
+                  )}
+                  {myMember.class_of ? (
+                    <span className="leadership-card__class">Class of {myMember.class_of}</span>
+                  ) : (
+                    <span className="leadership-card__add">Add class year</span>
+                  )}
+                </span>
+                <span className="leadership-card__tagline">
+                  <em>Students.</em>
+                  <em>Markets.</em>
+                  <em>A Stronger Tomorrow.</em>
+                </span>
               </span>
             </Link>
           ) : (

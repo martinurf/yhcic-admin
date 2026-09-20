@@ -761,35 +761,60 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .blueprint-bell-mask { position: absolute; z-index: 1; left: 82.5%; top: 1.1%; width: 2.3%; height: 1.4%; background: #fff; border-radius: 50%; }
 }
 
-/* ---------- Member Network (measured off "plano members.jpg" —
-   same header/hero proportions as the Content blueprint, so those
-   values are reused: .content-hero (same class, just outside .hub-page),
-   .section-toolbar, .text-btn, .primary, .editorial-list all carry
-   over unchanged). ---------- */
-.leadership-card {
-  position: relative; display: block; padding: 22px; border: 1px solid var(--line); background: #fff;
-  text-decoration: none; color: inherit;
-  display: grid; grid-template-columns: 130px 1fr; gap: 18px;
+/* ---------- Member Network (measured off "plano members.jpg") ----------
+   Own hero — NOT a reuse of .content-hero. The blueprint's background
+   here is plain white (measured: 253-255 everywhere), so no gradient
+   wash; and the tower photo's own crop/position/height is different
+   from the Content hub's, measured separately below. The LEADERSHIP
+   heading row lives INSIDE this hero (not below it) because the photo
+   bleeds behind that row too in the blueprint, stopping only at the
+   card's own opaque background. */
+.members-hero { position: relative; padding: 8px clamp(20px, 5.5vw, 50px) 0; overflow: hidden; isolation: isolate; }
+.members-hero__art {
+  position: absolute; z-index: -1; right: 0; top: 11.57vw; width: 46.18vw; height: 45.72vw;
+  object-fit: cover; object-position: center 20%;
+  opacity: 0.16;
+  filter: grayscale(1) brightness(0.35) sepia(1) hue-rotate(228deg) saturate(6);
 }
-.leadership-card__arrow { position: absolute; top: 18px; right: 18px; color: var(--purple); }
-.leadership-card__arrow svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.6; fill: none; }
-.leadership-card__photo { width: 130px; height: 168px; background: var(--wash, #f2edf6); overflow: hidden; }
+.members-hero h1 { max-width: 620px; margin: 0; font-family: var(--ff-display); font-weight: 500; font-size: clamp(2.6rem, 12vw, 3.4rem); line-height: .84; letter-spacing: -.065em; }
+.members-hero h1 span { display: block; white-space: nowrap; }
+.members-hero .hero-rule { width: 60px; height: 2px; margin: 27px 0 17px; background: var(--purple); }
+.members-hero p.sub { margin: 0; color: var(--muted); text-transform: uppercase; letter-spacing: .25em; font-size: 12px; font-weight: 600; }
+.members-hero__leadership-row { margin: 0; padding: 20px 0 16px; position: relative; z-index: 1; }
+@media (max-width: 680px) { .members-hero { padding-bottom: 0; } }
+
+/* Photo sits flush against the card's own left/top/bottom edges (no
+   padding around it at all) — measured directly off plano members.jpg:
+   photo box 248x284 image-px = 112x128 CSS px, card content padded
+   13-14px around the text side only. Tagline is a THIRD column to the
+   right of the name/role/major block, not a row underneath it — its
+   own short rule sits above the three lines, left-aligned. */
+.leadership-card {
+  position: relative; display: grid; grid-template-columns: 112px 1fr; border: 1px solid var(--line); background: #fff;
+  text-decoration: none; color: inherit;
+}
+.leadership-card__arrow { position: absolute; top: 14px; right: 14px; color: var(--purple); z-index: 1; }
+.leadership-card__arrow svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+.leadership-card__photo { width: 112px; aspect-ratio: 248 / 284; background: var(--wash, #f2edf6); overflow: hidden; align-self: start; }
 .leadership-card__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .leadership-card__photo-default { width: 100%; height: 100%; display: grid; place-items: center; color: var(--muted); }
 .leadership-card__photo-default svg { width: 40%; height: 40%; stroke: currentColor; stroke-width: 1.4; fill: none; }
-.leadership-card__info { display: flex; flex-direction: column; }
-.leadership-card__name { font-family: var(--ff-display); font-weight: 500; font-size: 1.7rem; line-height: 1.1; letter-spacing: -.02em; }
-.leadership-card__role { margin-top: 2px; font-family: var(--ff-display); font-style: italic; font-size: 1.05rem; color: var(--purple); }
-.leadership-card__field-label { margin-top: 14px; font-family: var(--ff-mono); font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
-.leadership-card__field { margin-top: 2px; font-size: .92rem; }
-.leadership-card__class { margin-top: 10px; font-family: var(--ff-mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-.leadership-card__add { margin-top: 6px; display: inline-block; padding: 3px 8px; color: #a39cab; background: #f4f1f6; font-size: .72rem; font-style: italic; width: fit-content; }
-.leadership-card__tagline { grid-column: 1 / -1; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); font-family: var(--ff-display); font-style: italic; font-size: .85rem; line-height: 1.55; color: #9088a0; display: block; }
+.leadership-card__content { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 13px 14px; align-items: start; }
+.leadership-card__info { display: flex; flex-direction: column; min-width: 0; }
+.leadership-card__name { font-family: var(--ff-display); font-weight: 500; font-size: 1.5rem; line-height: 1.15; letter-spacing: -.02em; }
+.leadership-card__role { margin-top: 3px; font-family: var(--ff-display); font-style: italic; font-size: .95rem; color: var(--purple); }
+.leadership-card__field-label { margin-top: 12px; font-family: var(--ff-mono); font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.leadership-card__field { margin-top: 2px; font-size: .88rem; }
+.leadership-card__class { margin-top: 10px; font-family: var(--ff-mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.leadership-card__add { margin-top: 5px; display: inline-block; padding: 3px 8px; color: #a39cab; background: #f4f1f6; font-size: .68rem; font-style: italic; width: fit-content; }
+.leadership-card__tagline { width: 95px; flex: none; padding-top: 10px; border-top: 1px solid var(--line); font-family: var(--ff-display); font-style: italic; font-size: .74rem; line-height: 1.5; color: #9088a0; }
 .leadership-card__tagline em { display: block; font-style: italic; }
-@media (max-width: 560px) {
-  .leadership-card { grid-template-columns: 96px 1fr; padding: 16px; gap: 14px; }
-  .leadership-card__photo { width: 96px; height: 124px; }
-  .leadership-card__name { font-size: 1.4rem; }
+@media (max-width: 400px) {
+  .leadership-card { grid-template-columns: 88px 1fr; }
+  .leadership-card__photo { width: 88px; }
+  .leadership-card__content { grid-template-columns: 1fr; padding: 11px 12px; gap: 10px; }
+  .leadership-card__tagline { width: auto; padding-top: 8px; }
+  .leadership-card__name { font-size: 1.3rem; }
 }
 
 .teams-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
