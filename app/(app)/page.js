@@ -3,9 +3,10 @@ import { createClient } from "@/lib/supabase/server";
 import Greeting from "./greeting";
 import HeroActions from "./hero-actions";
 
-async function countRows(supabase, table, filters = {}) {
+async function countRows(supabase, table, filters = {}, excludeDeleted = false) {
   let query = supabase.from(table).select("id", { count: "exact", head: true });
   for (const [key, value] of Object.entries(filters)) query = query.eq(key, value);
+  if (excludeDeleted) query = query.is("deleted_at", null);
   const { count } = await query;
   return count ?? 0;
 }
@@ -27,9 +28,9 @@ export default async function DashboardPage() {
 
   const [pending, memberCount, projectCount, announcementCount, { data: recentApplications }, { data: recentAnnouncement }] = await Promise.all([
     countRows(supabase, "applications", { status: "pending" }),
-    countRows(supabase, "members"),
-    countRows(supabase, "projects"),
-    countRows(supabase, "announcements", { published: true }),
+    countRows(supabase, "members", {}, true),
+    countRows(supabase, "projects", {}, true),
+    countRows(supabase, "announcements", { published: true }, true),
     supabase
       .from("applications")
       .select("id, name, submitted_at")

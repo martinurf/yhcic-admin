@@ -38,14 +38,15 @@ export async function updateStatus(applicationId, newStatus) {
   });
 
   /* Accepting an application seeds a draft member with what we already
-     know, instead of making the officer retype it. The unique index on
+     know (major, phone — role is left blank, an officer fills that in),
+     instead of making the officer retype it. The unique index on
      source_application_id makes this idempotent — accept/reject/accept
      again can't spawn a second draft, so a duplicate-key error here is
      expected and silently ignored rather than surfaced as a failure. */
   if (newStatus === "accepted") {
     const { error: memberError } = await supabase.from("members").insert({
       name: current.name,
-      role: "Member",
+      role: "",
       major: current.major,
       phone: current.phone,
       published: false,
@@ -55,6 +56,27 @@ export async function updateStatus(applicationId, newStatus) {
     });
     if (memberError && memberError.code !== "23505") {
       console.error("Draft member creation failed:", memberError.message);
+    }
+    revalidatePath("/content/members");
+  }
+
+  /* Leaving "accepted" (back to pending, or rejected) retracts the
+     draft it created — the application is no longer accepted, so an
+     un-published draft shouldn't keep sitting in the members list.
+     A member that already made it live stays untouched: publishing
+     detaches it from the application's fate. Clearing
+     source_application_id alongside the soft delete frees the unique
+     index slot so accepting the same application again can insert a
+     fresh draft instead of colliding with this now-deleted one. */
+  if (current.status === "accepted" && newStatus !== "accepted") {
+    const { error: retractError } = await supabase
+      .from("members")
+      .update({ deleted_at: new Date().toISOString(), source_application_id: null, updated_by: user.id })
+      .eq("source_application_id", applicationId)
+      .eq("published", false)
+      .is("deleted_at", null);
+    if (retractError) {
+      console.error("Draft member retraction failed:", retractError.message);
     }
     revalidatePath("/content/members");
   }

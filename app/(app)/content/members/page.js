@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import RequestPublishButton from "../request-publish-button";
+import { requestMemberPublish } from "./actions";
 
 export default async function MembersListPage() {
   const supabase = await createClient();
@@ -31,16 +33,21 @@ export default async function MembersListPage() {
               ? { label: "Requested", tone: "pending" }
               : { label: "Draft", tone: "draft" };
             return (
-              <Link key={m.id} href={`/content/members/${m.id}`} className="list__row">
-                <div>
+              <div key={m.id} className="list__row">
+                <Link href={`/content/members/${m.id}`} className="list__row-link">
                   <span className="list__title">
                     {m.name}
                     {details ? <span className="list__title-meta"> — {details}</span> : null}
                   </span>
                   {!details ? <p className="list__sub muted">No details yet</p> : null}
+                </Link>
+                <div className="list__row-actions">
+                  <span className={`badge badge--${status.tone}`}>{status.label}</span>
+                  {status.tone === "draft" ? (
+                    <RequestPublishButton id={m.id} requestAction={requestMemberPublish} />
+                  ) : null}
                 </div>
-                <span className={`badge badge--${status.tone}`}>{status.label}</span>
-              </Link>
+              </div>
             );
           })
         )}
