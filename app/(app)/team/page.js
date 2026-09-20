@@ -3,6 +3,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveAdmin } from "@/lib/require-admin";
 import InviteForm from "./invite-form";
 import RevokeButton from "./revoke-button";
+import AdminToggle from "./admin-toggle";
 
 function inviteStatus(inv) {
   if (inv.accepted_at) return { label: "Accepted", tone: "published" };
@@ -38,8 +39,11 @@ export default async function TeamPage() {
               <span className="list__title">{a.display_name}</span>
               <p className="list__sub">@{a.username}</p>
             </div>
-            <span className={`badge badge--${a.active ? "published" : "draft"}`}>
-              {a.active ? "Active" : "Disabled"}
+            <span className="row" style={{ gap: 10 }}>
+              <span className={`badge badge--${a.active ? "published" : "draft"}`}>
+                {a.active ? "Active" : "Disabled"}
+              </span>
+              {me.is_owner && a.id !== me.id ? <AdminToggle id={a.id} active={a.active} /> : null}
             </span>
           </div>
         ))}

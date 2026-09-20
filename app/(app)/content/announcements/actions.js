@@ -1,5 +1,6 @@
 "use server";
 
+import { createClient } from "@/lib/supabase/server";
 import { saveContent, softDeleteContent } from "@/lib/content";
 
 const TABLE = "announcements";
@@ -17,7 +18,19 @@ export async function saveAnnouncement(id, formData) {
   if (data.title.length > 140) return { error: "Title is too long (140 characters max)." };
   if (data.body.length > 4000) return { error: "Body is too long (4000 characters max)." };
 
-  if (published) data.published_at = new Date().toISOString();
+  /* published_at marks the moment it first went live — only stamp it on
+     the transition into "published", not on every later edit. Without
+     this, correcting a typo on an already-live announcement would bump
+     it back to the top of the list as if it were brand new. */
+  if (published) {
+    let alreadyPublished = false;
+    if (id) {
+      const supabase = await createClient();
+      const { data: current } = await supabase.from(TABLE).select("published").eq("id", id).maybeSingle();
+      alreadyPublished = !!current?.published;
+    }
+    if (!alreadyPublished) data.published_at = new Date().toISOString();
+  }
 
   return saveContent(TABLE, id, data, PATH);
 }
