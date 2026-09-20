@@ -419,16 +419,23 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .invite-result { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
 
 /* ---------- announcement post (read-only view for non-authors) ---------- */
+/* Deliberately Facebook-post shaped: a constant official identity up
+   top (never swapped for uploaded content), then text, then an
+   uploaded photo as the last thing on the page — content, not chrome. */
 .post { max-width: 640px; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--paper); }
-.post__image { width: 100%; max-height: 420px; object-fit: cover; display: block; }
-.post__body { padding: 26px 28px 30px; }
-.post__meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-.post__byline { font-size: 12.5px; color: var(--muted); }
-.post__title { font-family: var(--ff-display); font-size: 34px; line-height: 1.08; font-weight: 600; margin: 0 0 16px; }
+.post__head { display: flex; align-items: center; gap: 12px; padding: 20px 24px 0; }
+.post__avatar { flex-shrink: 0; }
+.post__avatar .side__mark { font-size: 11px; padding: 0.5em 0.65em; }
+.post__byline { margin: 0; font-family: var(--ff-ui); font-size: 14.5px; font-weight: 600; color: var(--ink); }
+.post__subline { margin: 2px 0 0; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); }
+.post__body { padding: 18px 24px 24px; }
+.post__title { font-family: var(--ff-display); font-size: 30px; line-height: 1.1; font-weight: 600; margin: 0 0 14px; }
 .post__text { font-family: var(--ff-display); font-size: 19px; line-height: 1.5; color: var(--ink); white-space: pre-wrap; margin: 0; }
+.post__image { width: 100%; max-height: 480px; object-fit: cover; display: block; }
 @media (max-width: 620px) {
-  .post__body { padding: 18px 18px 22px; }
-  .post__title { font-size: 26px; }
+  .post__head { padding: 16px 18px 0; }
+  .post__body { padding: 14px 18px 20px; }
+  .post__title { font-size: 24px; }
   .post__text { font-size: 15px; }
 }
 

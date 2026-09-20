@@ -118,7 +118,7 @@ export default function AnnouncementForm({ announcement, imageUrl }) {
           </div>
         ) : null}
         <input id="image" name="image" type="file" accept="image/*" onChange={onImageChange} />
-        <p className="fld__hint">JPEG, PNG, or WebP — up to 8MB. Shows in place of the YHCIC mark wherever this announcement appears.</p>
+        <p className="fld__hint">JPEG, PNG, or WebP — up to 8MB. Shown below the text when someone opens the full post — the YHCIC mark stays as the poster's identity either way.</p>
       </div>
 
       <label className="row" style={{ fontSize: 13.5 }}>
