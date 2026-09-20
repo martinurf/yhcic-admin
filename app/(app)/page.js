@@ -52,9 +52,9 @@ export default async function DashboardPage() {
         <img className="college-art" src="/college-lineart.webp" alt="" aria-hidden="true" />
         <div className="topbar">
           <div className="monogram" aria-label="YHCIC">
-            YH
+            YHC
             <br />
-            CIC
+            IC
           </div>
           <HeroActions pendingCount={pending} />
         </div>
@@ -151,8 +151,12 @@ export default async function DashboardPage() {
           </div>
           {recentAnnouncement ? (
             <Link href={`/content/announcements/${recentAnnouncement.id}`} className="announcement-item">
-              <div className="round-icon round-icon--brand">
-                <img src="/logo-mark.svg" alt="" aria-hidden="true" />
+              <div className="round-icon round-icon--brand" aria-hidden="true">
+                <span>
+                  YHC
+                  <br />
+                  IC
+                </span>
               </div>
               <div>
                 <div className="announcement-titleline">

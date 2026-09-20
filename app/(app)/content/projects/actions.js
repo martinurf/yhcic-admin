@@ -1,6 +1,6 @@
 "use server";
 
-import { saveContent, softDeleteContent } from "@/lib/content";
+import { saveContent, softDeleteContent, requestPublish, resolvePublishRequest } from "@/lib/content";
 
 const TABLE = "projects";
 const PATH = "/content/projects";
@@ -11,7 +11,6 @@ export async function saveProject(id, formData) {
     status: String(formData.get("status") || "").trim(),
     code: String(formData.get("code") || "").trim() || null,
     body: String(formData.get("body") || "").trim(),
-    published: formData.get("published") === "on",
   };
   if (!data.title || !data.status || !data.body) return { error: "Title, status, and body are required." };
   return saveContent(TABLE, id, data, PATH);
@@ -19,4 +18,12 @@ export async function saveProject(id, formData) {
 
 export async function deleteProject(id) {
   return softDeleteContent(TABLE, id, PATH);
+}
+
+export async function requestProjectPublish(id) {
+  return requestPublish(TABLE, id, PATH);
+}
+
+export async function resolveProjectRequest(id, publish) {
+  return resolvePublishRequest(TABLE, id, publish, PATH);
 }

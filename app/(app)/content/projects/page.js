@@ -5,7 +5,7 @@ export default async function ProjectsListPage() {
   const supabase = await createClient();
   const { data: items } = await supabase
     .from("projects")
-    .select("id, title, status, published, updated_at")
+    .select("id, title, status, published, requested_at, updated_at")
     .is("deleted_at", null)
     .order("sort_order", { ascending: true });
 
@@ -29,17 +29,22 @@ export default async function ProjectsListPage() {
         {!items?.length ? (
           <p className="list__empty">No projects yet — these stay private to the club until published.</p>
         ) : (
-          items.map((p) => (
-            <Link key={p.id} href={`/content/projects/${p.id}`} className="list__row">
-              <div>
-                <span className="list__title">{p.title}</span>
-                <p className="list__sub">{p.status}</p>
-              </div>
-              <span className={`badge badge--${p.published ? "published" : "draft"}`}>
-                {p.published ? "Published" : "Draft"}
-              </span>
-            </Link>
-          ))
+          items.map((p) => {
+            const status = p.published
+              ? { label: "Published", tone: "published" }
+              : p.requested_at
+              ? { label: "Requested", tone: "pending" }
+              : { label: "Draft", tone: "draft" };
+            return (
+              <Link key={p.id} href={`/content/projects/${p.id}`} className="list__row">
+                <div>
+                  <span className="list__title">{p.title}</span>
+                  <p className="list__sub">{p.status}</p>
+                </div>
+                <span className={`badge badge--${status.tone}`}>{status.label}</span>
+              </Link>
+            );
+          })
         )}
       </div>
     </div>

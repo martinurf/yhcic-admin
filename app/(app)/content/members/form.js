@@ -2,12 +2,20 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { saveMember, deleteMember } from "./actions";
+import { saveMember, deleteMember, requestMemberPublish } from "./actions";
+
+function statusOf(member) {
+  if (!member) return null;
+  if (member.published) return { label: "Published", tone: "published" };
+  if (member.requested_at) return { label: "Requested", tone: "pending" };
+  return { label: "Draft", tone: "draft" };
+}
 
 export default function MemberForm({ member }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState(null);
+  const status = statusOf(member);
 
   function onSubmit(e) {
     e.preventDefault();
@@ -30,8 +38,28 @@ export default function MemberForm({ member }) {
     });
   }
 
+  function onRequest() {
+    if (!member?.id) return;
+    startTransition(async () => {
+      const res = await requestMemberPublish(member.id);
+      if (res?.error) setError(res.error);
+      else router.refresh();
+    });
+  }
+
   return (
     <form onSubmit={onSubmit} className="stack">
+      {status ? (
+        <div className="row" style={{ justifyContent: "space-between" }}>
+          <span className={`badge badge--${status.tone}`}>{status.label}</span>
+          {status.tone === "draft" ? (
+            <button type="button" className="btn btn--sm" disabled={pending} onClick={onRequest}>
+              Send request to publish
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className="form__row">
         <div className="fld">
           <label htmlFor="name">Name</label>
@@ -56,11 +84,6 @@ export default function MemberForm({ member }) {
         <label htmlFor="phone">Phone <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional</em></label>
         <input id="phone" name="phone" type="tel" placeholder="(706) 555-0123" defaultValue={member?.phone || ""} />
       </div>
-
-      <label className="row" style={{ fontSize: 13.5 }}>
-        <input type="checkbox" name="published" defaultChecked={member?.published} style={{ width: "auto" }} />
-        Published
-      </label>
 
       {error ? <p className="status-text" data-tone="err">{error}</p> : null}
 

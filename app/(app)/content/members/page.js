@@ -5,7 +5,7 @@ export default async function MembersListPage() {
   const supabase = await createClient();
   const { data: items } = await supabase
     .from("members")
-    .select("id, name, role, major, focus, published")
+    .select("id, name, role, major, focus, published, requested_at")
     .is("deleted_at", null)
     .order("sort_order", { ascending: true });
 
@@ -25,6 +25,11 @@ export default async function MembersListPage() {
         ) : (
           items.map((m) => {
             const details = [m.role, m.major, m.focus].filter(Boolean).join(" · ");
+            const status = m.published
+              ? { label: "Published", tone: "published" }
+              : m.requested_at
+              ? { label: "Requested", tone: "pending" }
+              : { label: "Draft", tone: "draft" };
             return (
               <Link key={m.id} href={`/content/members/${m.id}`} className="list__row">
                 <div>
@@ -34,9 +39,7 @@ export default async function MembersListPage() {
                   </span>
                   {!details ? <p className="list__sub muted">No details yet</p> : null}
                 </div>
-                <span className={`badge badge--${m.published ? "published" : "draft"}`}>
-                  {m.published ? "Published" : "Draft"}
-                </span>
+                <span className={`badge badge--${status.tone}`}>{status.label}</span>
               </Link>
             );
           })
