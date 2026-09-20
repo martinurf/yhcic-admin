@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /* Owned membership-application intake. The public site posts here
@@ -67,7 +68,11 @@ export async function POST(request) {
     return Response.json({ error: "Could not save your application. Please try again." }, { status: 500, headers });
   }
 
-  notifyOfficers(admin, application.id, { name, email, gradYear, major, referral, experience, phone }).catch(() => {});
+  // Vercel functions can freeze right after the response is sent — after()
+  // keeps this running instead of racing (and losing to) that freeze.
+  after(() =>
+    notifyOfficers(admin, application.id, { name, email, gradYear, major, referral, experience, phone }).catch(() => {})
+  );
 
   return Response.json({ ok: true }, { status: 200, headers });
 }
