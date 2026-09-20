@@ -46,8 +46,22 @@ export async function middleware(request) {
     return NextResponse.redirect(url);
   }
 
+  const disabledSection = DISABLED_SECTIONS.find(
+    (base) => request.nextUrl.pathname !== base && request.nextUrl.pathname.startsWith(base + "/")
+  );
+  if (disabledSection) {
+    const url = request.nextUrl.clone();
+    url.pathname = disabledSection;
+    return NextResponse.redirect(url);
+  }
+
   return response;
 }
+
+/* Content types not ready for real use yet — their list pages show a
+   "coming soon" placeholder; this collapses any /new or /[id] sub-route
+   back to the list page so the disabled state can't be bypassed by URL. */
+const DISABLED_SECTIONS = ["/content/announcements", "/content/projects", "/content/goals"];
 
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],

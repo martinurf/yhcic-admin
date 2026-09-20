@@ -5,9 +5,9 @@ import NavLink from "./nav-link";
 const NAV = [
   { href: "/", label: "Dashboard" },
   { href: "/applications", label: "Applications" },
-  { href: "/content/announcements", label: "Announcements" },
-  { href: "/content/projects", label: "Projects" },
-  { href: "/content/goals", label: "Goals" },
+  { href: "/content/announcements", label: "Announcements", disabled: true },
+  { href: "/content/projects", label: "Projects", disabled: true },
+  { href: "/content/goals", label: "Goals", disabled: true },
   { href: "/content/members", label: "Members" },
 ];
 
@@ -35,7 +35,7 @@ export default async function AppLayout({ children }) {
 
         <nav className="side__nav">
           {NAV.map((item) => (
-            <NavLink key={item.href} href={item.href}>
+            <NavLink key={item.href} href={item.href} disabled={item.disabled}>
               {item.label}
             </NavLink>
           ))}
