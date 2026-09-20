@@ -1,21 +1,30 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveAdmin } from "@/lib/require-admin";
+import ContentTopbar from "./content-topbar";
 
 export default async function ContentHubPage() {
   const me = await requireActiveAdmin();
   const supabase = await createClient();
+  /* resources has zero RLS policies for the authenticated role (by
+     design — every read/write goes through service-role actions that
+     check is_active_admin() themselves), so a plain session count
+     would always come back 0. */
+  const admin = createAdminClient();
 
   const [
     { count: projectCount },
     { count: announcementPublished },
     { count: sourceCount },
+    { count: pendingCount },
     { data: recentProject },
     { data: recentAnnouncement },
   ] = await Promise.all([
     supabase.from("projects").select("id", { count: "exact", head: true }).is("deleted_at", null),
     supabase.from("announcements").select("id", { count: "exact", head: true }).is("deleted_at", null).eq("published", true),
-    supabase.from("resources").select("id", { count: "exact", head: true }).is("deleted_at", null),
+    admin.from("resources").select("id", { count: "exact", head: true }).is("deleted_at", null),
+    supabase.from("applications").select("id", { count: "exact", head: true }).eq("status", "pending"),
     me
       ? supabase
           .from("projects")
@@ -52,11 +61,9 @@ export default async function ContentHubPage() {
     .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
 
   return (
-    <div className="container" style={{ paddingLeft: 0, paddingRight: 0 }}>
-      <div style={{ padding: "0 clamp(20px, 4vw, 43px)" }}>
-        <p className="page__eyebrow">Content</p>
-      </div>
-
+    <>
+      <ContentTopbar title="Content Library" pendingCount={pendingCount || 0} />
+    <div className="container flush-top" style={{ paddingLeft: 0, paddingRight: 0 }}>
       <section className="content-hero">
         <img className="content-hero__art" src="/college-lineart.webp" alt="" aria-hidden="true" />
         <h1>
@@ -132,5 +139,6 @@ export default async function ContentHubPage() {
         </Link>
       ) : null}
     </div>
+    </>
   );
 }

@@ -100,11 +100,40 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   padding: 0.4em 0.6em;
   width: fit-content;
 }
+.side__mark--lg { font-size: 22px; padding: 0.5em 0.7em; }
 
 .main { min-width: 0; padding-bottom: 112px; }
 @media (max-width: 620px) { .main { padding-bottom: 78px; } }
 
 .container { padding: calc(76px + env(safe-area-inset-top, 0px)) clamp(20px, 4vw, 43px) 0; }
+/* Pages with their own ContentTopbar don't need the top padding
+   reserved for the floating hamburger — the sticky bar takes that
+   space instead. */
+.container.flush-top { padding-top: clamp(20px, 4vw, 43px); }
+
+/* ---------- Content Library topbar ---------- */
+/* Rendered as a sibling before .container, not inside it — full width
+   on its own, no padding to fight against. */
+.section-topbar {
+  width: 100%; height: 60px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px;
+  padding: 0 clamp(20px, 4vw, 43px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.96);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  position: sticky; top: 0; z-index: 20;
+}
+.section-topbar__title { justify-self: center; color: var(--muted); text-transform: uppercase; letter-spacing: .26em; font-size: 10.5px; font-weight: 600; white-space: nowrap; }
+.section-topbar__actions { justify-self: end; display: flex; align-items: center; gap: 6px; }
+.section-topbar .icon-btn { position: relative; border: 0; background: transparent; color: var(--ink); cursor: pointer; display: grid; place-items: center; padding: 8px; }
+.section-topbar .icon-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.7; fill: none; }
+.section-topbar .icon-btn .dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--purple); }
+@media (max-width: 480px) {
+  .section-topbar { padding: 0 14px; gap: 6px; }
+  .side__mark--lg { font-size: 15px; padding: 0.45em 0.55em; }
+  .section-topbar__title { font-size: 9px; letter-spacing: .18em; }
+  .section-topbar .icon-btn { padding: 6px; }
+  .section-topbar .icon-btn svg { width: 20px; height: 20px; }
+}
 
 .page__head {
   position: relative;

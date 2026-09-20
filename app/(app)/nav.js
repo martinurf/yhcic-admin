@@ -62,12 +62,16 @@ export default function Nav() {
   );
 }
 
-/* The hero on "/" carries its own menu button. Every other page gets
-   this small equivalent so Team, sign out, etc. stay reachable. */
+/* The hero on "/" carries its own menu button, and the Content Library
+   screens (hub, Projects, Announcements, Sources — not /content/members,
+   which has no topbar of its own) carry ContentTopbar with the same
+   trigger built in. Either one paired with this floating button would
+   just be a second hamburger on the same screen. */
+const HAS_OWN_TOPBAR = [/^\/content$/, /^\/content\/projects/, /^\/content\/announcements/, /^\/content\/sources/];
 export function PageMenuButton() {
   const pathname = usePathname();
   const { setOpen } = useMenu();
-  if (pathname === "/") return null;
+  if (pathname === "/" || HAS_OWN_TOPBAR.some((re) => re.test(pathname))) return null;
 
   return (
     <button type="button" className="page-menu-btn" aria-label="Open menu" onClick={() => setOpen(true)}>
