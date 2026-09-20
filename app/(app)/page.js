@@ -25,9 +25,11 @@ export default async function DashboardPage() {
   const displayName = profile?.display_name || profile?.username || "officer";
   const firstName = displayName.split(" ")[0];
 
-  const [pending, memberCount, { data: recentApplications }, { data: recentAnnouncement }] = await Promise.all([
+  const [pending, memberCount, projectCount, announcementCount, { data: recentApplications }, { data: recentAnnouncement }] = await Promise.all([
     countRows(supabase, "applications", { status: "pending" }),
     countRows(supabase, "members"),
+    countRows(supabase, "projects"),
+    countRows(supabase, "announcements", { published: true }),
     supabase
       .from("applications")
       .select("id, name, submitted_at")
@@ -66,7 +68,7 @@ export default async function DashboardPage() {
           Tomorrows
         </p>
         <div className="hero-copy">
-          <p className="eyebrow">Admin overview</p>
+          <p className="eyebrow">Officer overview</p>
           <Greeting name={firstName} />
           <p className="motto">Students. Ideas. Impact.</p>
           <div className="small-rule" />
@@ -85,21 +87,21 @@ export default async function DashboardPage() {
           <span className="metric-label">Applications</span>
           <strong className="metric-value">{pending}</strong>
         </Link>
-        <span className="metric">
+        <Link href="/content/projects" className="metric">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M9 18h6M10 22h4M8.5 14.5A6 6 0 1 1 15.5 14.5c-1 .7-1.5 1.4-1.5 2.5h-4c0-1.1-.5-1.8-1.5-2.5z" />
           </svg>
-          <span className="metric-label">Projects</span>
-          <strong className="metric-value metric-value--soon">Soon</strong>
-        </span>
-        <span className="metric">
+          <span className="metric-label">Current projects</span>
+          <strong className="metric-value">{projectCount}</strong>
+        </Link>
+        <Link href="/content/announcements" className="metric">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="m3 11 14-5v12L3 13z" />
             <path d="M11 16v4H7l-1-6M20 9v6" />
           </svg>
           <span className="metric-label">Announcements</span>
-          <strong className="metric-value metric-value--soon">Soon</strong>
-        </span>
+          <strong className="metric-value">{announcementCount}</strong>
+        </Link>
         <Link href="/content/members" className="metric">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
@@ -143,32 +145,27 @@ export default async function DashboardPage() {
         <section className="home-section announcements-card" id="announcements">
           <div className="announcements-head">
             <h2>Announcements</h2>
-            <Link href="/team" className="view-all">
+            <Link href="/content/announcements" className="view-all">
               View all &rarr;
             </Link>
           </div>
           {recentAnnouncement ? (
-            <article className="announcement-item">
-              <div className="round-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="m3 11 14-5v12L3 13z" />
-                  <path d="M11 16v4H7l-1-6M20 9v6" />
-                </svg>
-              </div>
+            <Link href={`/content/announcements/${recentAnnouncement.id}`} className="announcement-item">
+              <div className="round-icon round-icon--brand" aria-hidden="true">YH</div>
               <div>
                 <div className="announcement-titleline">
                   <h3>{recentAnnouncement.title}</h3>
                   <span className="published-badge">Published</span>
                 </div>
-                <p className="announcement-meta">{new Date(recentAnnouncement.published_at).toLocaleDateString()}</p>
+                <p className="announcement-meta">
+                  YHCIC &middot; {new Date(recentAnnouncement.published_at).toLocaleDateString()}
+                </p>
                 <p className="announcement-copy">{recentAnnouncement.body}</p>
               </div>
               <span className="chevron">&rsaquo;</span>
-            </article>
+            </Link>
           ) : (
-            <div className="announcement-empty">
-              Announcements aren&rsquo;t enabled yet &mdash; <span className="soon-badge">Soon</span>
-            </div>
+            <div className="announcement-empty">No announcements yet.</div>
           )}
         </section>
       </main>

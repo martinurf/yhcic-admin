@@ -4,8 +4,6 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useMenu } from "./menu-context";
 
-const SOON = ["Announcements", "Projects", "Goals"];
-
 export default function MenuSheet({ profile, onSignOut }) {
   const { open, setOpen } = useMenu();
 
@@ -30,13 +28,15 @@ export default function MenuSheet({ profile, onSignOut }) {
         <Link href="/team" className="sheet__link" onClick={() => setOpen(false)}>
           Team &amp; invitations
         </Link>
-
-        <p className="sheet__title">Coming soon</p>
-        {SOON.map((label) => (
-          <div key={label} className="sheet__soon">
-            {label} <b>Soon</b>
-          </div>
-        ))}
+        <Link href="/content/announcements" className="sheet__link" onClick={() => setOpen(false)}>
+          Announcements
+        </Link>
+        <Link href="/content/projects" className="sheet__link" onClick={() => setOpen(false)}>
+          Projects
+        </Link>
+        <Link href="/content/sources" className="sheet__link" onClick={() => setOpen(false)}>
+          Sources &amp; research
+        </Link>
 
         <div className="sheet__foot">
           <p className="sheet__who">

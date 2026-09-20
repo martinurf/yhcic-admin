@@ -67,7 +67,7 @@ export async function middleware(request) {
 /* Content types not ready for real use yet — their list pages show a
    "coming soon" placeholder; this collapses any /new or /[id] sub-route
    back to the list page so the disabled state can't be bypassed by URL. */
-const DISABLED_SECTIONS = ["/content/announcements", "/content/projects", "/content/goals"];
+const DISABLED_SECTIONS = ["/content/goals"];
 
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|webp|svg|ico)$).*)"],
