@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { mediaPublicUrl } from "@/lib/media-url";
 import Greeting from "./greeting";
 import HeroActions from "./hero-actions";
 
@@ -39,7 +40,7 @@ export default async function DashboardPage() {
       .limit(3),
     supabase
       .from("announcements")
-      .select("id, title, body, published_at")
+      .select("id, title, body, published_at, media(storage_key)")
       .eq("published", true)
       .is("deleted_at", null)
       .order("published_at", { ascending: false })
@@ -170,6 +171,9 @@ export default async function DashboardPage() {
                 <p className="announcement-copy">{recentAnnouncement.body}</p>
               </div>
               <span className="chevron">&rsaquo;</span>
+              {mediaPublicUrl(recentAnnouncement.media?.storage_key) ? (
+                <img className="announcement-item__photo" src={mediaPublicUrl(recentAnnouncement.media?.storage_key)} alt="" />
+              ) : null}
             </Link>
           ) : (
             <div className="announcement-empty">No announcements yet.</div>

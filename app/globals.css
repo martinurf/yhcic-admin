@@ -206,7 +206,9 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .round-icon svg { width: 39px; height: 39px; stroke: currentColor; fill: none; stroke-width: 1.7; }
 .announcement-item__mark { width: 70px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .announcement-item__mark .side__mark { font-size: 12px; padding: 0.5em 0.65em; }
-.announcement-item__photo { aspect-ratio: 1 / 1; height: auto; object-fit: cover; border-radius: var(--radius); }
+/* Spans the full card width, below the text — the mark above stays the
+   identity; this is content, same as the full post view. */
+.announcement-item__photo { grid-column: 1 / -1; width: 100%; max-height: 220px; object-fit: cover; border-radius: var(--radius); margin-top: 2px; }
 .approw h3 { margin: 0 0 4px; font-size: 26px; line-height: 1.1; font-family: var(--ff-display); font-weight: 600; }
 .approw-copy { min-width: 0; }
 .approw-copy p { margin: 0; color: var(--muted); font-size: 17px; line-height: 1.55; }
@@ -307,6 +309,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .announcement-item .round-icon svg { width: 22px; height: 22px; }
   .announcement-item__mark { width: 50px; }
   .announcement-item__mark .side__mark { font-size: 9px; padding: 0.45em 0.5em; }
+  .announcement-item__photo { max-height: 160px; }
   .announcement-titleline { gap: 8px; }
   .announcement-titleline h3 { font-size: 18px; }
   .announcement-meta { font-size: 12px; margin: 2px 0 8px; }
