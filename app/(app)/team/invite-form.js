@@ -36,11 +36,11 @@ export default function InviteForm() {
     <div>
       <form onSubmit={onSubmit} className="row" style={{ alignItems: "flex-end", flexWrap: "wrap", gap: 10 }}>
         <div className="fld" style={{ flex: "1 1 220px" }}>
-          <label htmlFor="invite-email">Email to invite</label>
-          <input id="invite-email" name="email" type="email" placeholder="cofounder@yhc.edu" required />
+          <label htmlFor="invite-name">Name <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional, just for you</em></label>
+          <input id="invite-name" name="name" type="text" placeholder="Alex Mackey" />
         </div>
         <button className="btn btn--primary" type="submit" disabled={pending}>
-          {pending ? "Generating…" : "Generate invite link"}
+          {pending ? "Generating…" : "Get invite link"}
         </button>
       </form>
 

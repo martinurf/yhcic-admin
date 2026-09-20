@@ -5,7 +5,7 @@ export default async function MembersListPage() {
   const supabase = await createClient();
   const { data: items } = await supabase
     .from("members")
-    .select("id, name, role, published")
+    .select("id, name, role, major, focus, published")
     .is("deleted_at", null)
     .order("sort_order", { ascending: true });
 
@@ -23,17 +23,23 @@ export default async function MembersListPage() {
         {!items?.length ? (
           <p className="list__empty">No members yet.</p>
         ) : (
-          items.map((m) => (
-            <Link key={m.id} href={`/content/members/${m.id}`} className="list__row">
-              <div>
-                <span className="list__title">{m.name}</span>
-                <p className="list__sub">{m.role}</p>
-              </div>
-              <span className={`badge badge--${m.published ? "published" : "draft"}`}>
-                {m.published ? "Published" : "Draft"}
-              </span>
-            </Link>
-          ))
+          items.map((m) => {
+            const details = [m.role, m.major, m.focus].filter(Boolean).join(" · ");
+            return (
+              <Link key={m.id} href={`/content/members/${m.id}`} className="list__row">
+                <div>
+                  <span className="list__title">
+                    {m.name}
+                    {details ? <span className="list__title-meta"> — {details}</span> : null}
+                  </span>
+                  {!details ? <p className="list__sub muted">No details yet</p> : null}
+                </div>
+                <span className={`badge badge--${m.published ? "published" : "draft"}`}>
+                  {m.published ? "Published" : "Draft"}
+                </span>
+              </Link>
+            );
+          })
         )}
       </div>
     </div>

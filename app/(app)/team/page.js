@@ -18,7 +18,7 @@ export default async function TeamPage() {
   const admin = createAdminClient();
   const [{ data: admins }, { data: invitations }] = await Promise.all([
     admin.from("admin_profiles").select("id, username, display_name, active, created_at").order("created_at", { ascending: true }),
-    admin.from("invitations").select("id, email, expires_at, accepted_at, revoked_at, created_at").order("created_at", { ascending: false }),
+    admin.from("invitations").select("id, invited_name, expires_at, accepted_at, revoked_at, created_at").order("created_at", { ascending: false }),
   ]);
 
   return (
@@ -60,7 +60,7 @@ export default async function TeamPage() {
               return (
                 <div key={inv.id} className="list__row">
                   <div>
-                    <span className="list__title">{inv.email}</span>
+                    <span className="list__title">{inv.invited_name || "Invitation"}</span>
                     <p className="list__sub">
                       {status.label === "Pending"
                         ? `Expires ${new Date(inv.expires_at).toLocaleDateString()}`

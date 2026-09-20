@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { acceptInvite } from "./actions";
 
-export default function JoinForm({ token, email }) {
+export default function JoinForm({ token, suggestedName }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState(null);
 
@@ -20,12 +20,8 @@ export default function JoinForm({ token, email }) {
   return (
     <form onSubmit={onSubmit} className="stack">
       <div className="fld">
-        <label>Email</label>
-        <input value={email} disabled />
-      </div>
-      <div className="fld">
         <label htmlFor="displayName">Full name</label>
-        <input id="displayName" name="displayName" type="text" required autoFocus />
+        <input id="displayName" name="displayName" type="text" defaultValue={suggestedName || ""} required autoFocus />
       </div>
       <div className="fld">
         <label htmlFor="username">Username</label>

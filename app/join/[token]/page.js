@@ -7,7 +7,7 @@ export default async function JoinPage({ params }) {
   const admin = createAdminClient();
   const { data: invitation } = await admin
     .from("invitations")
-    .select("email, expires_at, accepted_at, revoked_at")
+    .select("invited_name, expires_at, accepted_at, revoked_at")
     .eq("token_hash", hashToken(token))
     .maybeSingle();
 
@@ -20,9 +20,11 @@ export default async function JoinPage({ params }) {
         <span className="side__mark" style={{ marginBottom: 22 }}>YHCIC</span>
         {valid ? (
           <>
-            <h1 className="login__title">Join as an officer</h1>
-            <p className="login__sub">Set your username and password to finish setting up your account.</p>
-            <JoinForm token={token} email={invitation.email} />
+            <h1 className="login__title">
+              {invitation.invited_name ? `Welcome, ${invitation.invited_name}` : "Welcome"}
+            </h1>
+            <p className="login__sub">You've been invited as a YHCIC officer. Set a username and password to get in.</p>
+            <JoinForm token={token} suggestedName={invitation.invited_name} />
           </>
         ) : (
           <>
