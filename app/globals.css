@@ -817,6 +817,18 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .member-row__arrow { flex: none; color: var(--purple); }
 .member-row__arrow svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
 
+/* Measured off plano members.jpg: LEADERSHIP/TEAMS/ALL MEMBERS are
+   small tracked caps, not the big serif h2 .section-toolbar uses for
+   Content's In progress/Research shelf — different treatment here. */
+.members-toolbar h2 {
+  font-family: var(--ff-ui); font-weight: 700; font-size: .85rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink);
+}
+.members-toolbar .text-btn {
+  font-family: var(--ff-mono); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--purple);
+}
+
+
 /* ---------- status badges (Team / list pages) ---------- */
 .badge {
   display: inline-flex; align-items: center; gap: 6px;

@@ -56,7 +56,7 @@ export default async function MembersListPage() {
         </section>
 
         <div className="workspace">
-          <div className="section-toolbar">
+          <div className="section-toolbar members-toolbar">
             <h2>Leadership</h2>
             <Link href="#all-members" className="text-btn">View all &rarr;</Link>
           </div>
@@ -104,7 +104,7 @@ export default async function MembersListPage() {
             <p className="empty"><strong>No members yet</strong>Add the first officer to get started.</p>
           )}
 
-          <div className="section-toolbar" style={{ marginTop: 32 }}>
+          <div className="section-toolbar members-toolbar" style={{ marginTop: 32 }}>
             <h2>Teams</h2>
             <Link href="/content/members/new" className="text-btn">Join a team &rarr;</Link>
           </div>
@@ -132,7 +132,7 @@ export default async function MembersListPage() {
             })}
           </div>
 
-          <div id="all-members" className="section-toolbar" style={{ marginTop: 32, scrollMarginTop: 90 }}>
+          <div id="all-members" className="section-toolbar members-toolbar" style={{ marginTop: 32, scrollMarginTop: 90 }}>
             <h2>All members</h2>
             <Link href="/content/members/new" className="text-btn">New member &rarr;</Link>
           </div>
