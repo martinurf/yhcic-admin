@@ -7,13 +7,37 @@ import { NextResponse } from "next/server";
    components below don't get to skip it just because a link is
    hidden in the UI. */
 export async function middleware(request) {
+  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+  const csp = [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data:",
+    "connect-src 'self' https://*.supabase.co",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+  ].join("; ");
+
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-nonce", nonce);
+
   // Public, unauthenticated routes — never gated behind admin login.
-  // /join is how someone without an account yet gets one.
-  if (request.nextUrl.pathname.startsWith("/api/apply") || request.nextUrl.pathname.startsWith("/join")) {
-    return NextResponse.next();
+  // /join is how someone without an account yet gets one; /api/public/*
+  // is the read-only feed the public site will eventually consume.
+  if (
+    request.nextUrl.pathname.startsWith("/api/apply") ||
+    request.nextUrl.pathname.startsWith("/api/public/") ||
+    request.nextUrl.pathname.startsWith("/join")
+  ) {
+    const res = NextResponse.next({ request: { headers: requestHeaders } });
+    res.headers.set("Content-Security-Policy", csp);
+    return res;
   }
 
-  let response = NextResponse.next({ request });
+  let response = NextResponse.next({ request: { headers: requestHeaders } });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -25,7 +49,7 @@ export async function middleware(request) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          response = NextResponse.next({ request });
+          response = NextResponse.next({ request: { headers: requestHeaders } });
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
           );
@@ -43,13 +67,17 @@ export async function middleware(request) {
   if (!user && !isLoginPage) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    return NextResponse.redirect(url);
+    const res = NextResponse.redirect(url);
+    res.headers.set("Content-Security-Policy", csp);
+    return res;
   }
 
   if (user && isLoginPage) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
-    return NextResponse.redirect(url);
+    const res = NextResponse.redirect(url);
+    res.headers.set("Content-Security-Policy", csp);
+    return res;
   }
 
   const disabledSection = DISABLED_SECTIONS.find(
@@ -58,9 +86,12 @@ export async function middleware(request) {
   if (disabledSection) {
     const url = request.nextUrl.clone();
     url.pathname = disabledSection;
-    return NextResponse.redirect(url);
+    const res = NextResponse.redirect(url);
+    res.headers.set("Content-Security-Policy", csp);
+    return res;
   }
 
+  response.headers.set("Content-Security-Policy", csp);
   return response;
 }
 

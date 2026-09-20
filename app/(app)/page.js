@@ -72,9 +72,9 @@ export default async function DashboardPage() {
           <Greeting name={firstName} />
           <p className="motto">Students. Ideas. Impact.</p>
           <div className="small-rule" />
-          <button className="primary-action" type="button" disabled aria-disabled="true">
+          <Link href="/content/announcements/new" className="primary-action">
             <span>&#65291;</span>New announcement
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -151,7 +151,9 @@ export default async function DashboardPage() {
           </div>
           {recentAnnouncement ? (
             <Link href={`/content/announcements/${recentAnnouncement.id}`} className="announcement-item">
-              <div className="round-icon round-icon--brand" aria-hidden="true">YH</div>
+              <div className="round-icon round-icon--brand">
+                <img src="/logo-mark.svg" alt="" aria-hidden="true" />
+              </div>
               <div>
                 <div className="announcement-titleline">
                   <h3>{recentAnnouncement.title}</h3>

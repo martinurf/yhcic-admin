@@ -1,6 +1,7 @@
 import { after } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { buildApplicationEmailHtml } from "@/lib/email/application-notice";
+import { PUBLIC_ORIGINS } from "@/lib/public-cors";
 
 /* Owned membership-application intake. The public site posts here
    instead of (or alongside, during a transition) Formspree. RLS has
@@ -8,7 +9,7 @@ import { buildApplicationEmailHtml } from "@/lib/email/application-notice";
    the only way a row gets created, and it always goes through the
    service-role client below, after this handler's own validation. */
 
-const ALLOWED_ORIGINS = ["https://yhcic.vercel.app", "https://martinurf.github.io"];
+const ALLOWED_ORIGINS = PUBLIC_ORIGINS;
 
 function corsHeaders(origin) {
   const allowed = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];

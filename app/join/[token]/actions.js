@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import { hashToken } from "@/lib/invite-token";
 
 const USERNAME_RE = /^[a-zA-Z0-9_]{3,24}$/;
@@ -63,5 +64,15 @@ export async function acceptInvite(token, formData) {
 
   await admin.from("invitations").update({ accepted_at: new Date().toISOString() }).eq("id", invitation.id);
 
-  redirect("/login");
+  // Sign them straight in — they just set this password, no reason to
+  // make them type it again on a separate screen.
+  const supabase = await createClient();
+  const { error: signInError } = await supabase.auth.signInWithPassword({ email: invitation.email, password });
+  if (signInError) {
+    // Account exists and is usable either way — this only affects whether
+    // they land in the panel or have to sign in once themselves.
+    redirect("/login");
+  }
+
+  redirect("/");
 }
