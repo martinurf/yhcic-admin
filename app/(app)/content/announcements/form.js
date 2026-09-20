@@ -4,15 +4,54 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { saveAnnouncement, deleteAnnouncement } from "./actions";
 
-export default function AnnouncementForm({ announcement }) {
+function readImageDimensions(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve({ width: img.naturalWidth, height: img.naturalHeight });
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Could not read that image."));
+    };
+    img.src = url;
+  });
+}
+
+export default function AnnouncementForm({ announcement, imageUrl }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState(null);
+  const [preview, setPreview] = useState(imageUrl || null);
+  const [removeImage, setRemoveImage] = useState(false);
+  const [imageDims, setImageDims] = useState(null);
+
+  async function onImageChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError(null);
+    setRemoveImage(false);
+    try {
+      const dims = await readImageDimensions(file);
+      setImageDims(dims);
+      setPreview(URL.createObjectURL(file));
+    } catch {
+      setError("Could not read that image. Try a different file.");
+      e.target.value = "";
+    }
+  }
 
   function onSubmit(e) {
     e.preventDefault();
     setError(null);
     const formData = new FormData(e.currentTarget);
+    if (imageDims) {
+      formData.set("imageWidth", String(imageDims.width));
+      formData.set("imageHeight", String(imageDims.height));
+    }
+    if (removeImage) formData.set("removeImage", "on");
     startTransition(async () => {
       const res = await saveAnnouncement(announcement?.id, formData);
       if (res?.error) setError(res.error);
@@ -41,6 +80,33 @@ export default function AnnouncementForm({ announcement }) {
         <label htmlFor="body">Body</label>
         <textarea id="body" name="body" rows={8} defaultValue={announcement?.body} maxLength={4000} required />
         <p className="fld__hint">Plain text for now — no HTML is rendered from this field.</p>
+      </div>
+
+      <div className="fld">
+        <label htmlFor="image">Image <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional — flyer, photo</em></label>
+        {preview && !removeImage ? (
+          <div style={{ marginBottom: 8 }}>
+            <img
+              src={preview}
+              alt=""
+              style={{ maxWidth: "100%", maxHeight: 220, borderRadius: "var(--radius)", border: "1px solid var(--line)", display: "block" }}
+            />
+            <button
+              type="button"
+              className="btn btn--sm"
+              style={{ marginTop: 8 }}
+              onClick={() => {
+                setRemoveImage(true);
+                setPreview(null);
+                setImageDims(null);
+              }}
+            >
+              Remove image
+            </button>
+          </div>
+        ) : null}
+        <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" onChange={onImageChange} />
+        <p className="fld__hint">JPEG, PNG, or WebP — up to 8MB. Shows in place of the YHCIC mark wherever this announcement appears.</p>
       </div>
 
       <label className="row" style={{ fontSize: 13.5 }}>

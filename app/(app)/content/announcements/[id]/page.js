@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { mediaPublicUrl } from "@/lib/media-url";
 import AnnouncementForm from "../form";
 
 export default async function EditAnnouncementPage({ params }) {
@@ -8,7 +9,7 @@ export default async function EditAnnouncementPage({ params }) {
   const supabase = await createClient();
   const { data: announcement } = await supabase
     .from("announcements")
-    .select("*")
+    .select("*, media(storage_key)")
     .eq("id", id)
     .is("deleted_at", null)
     .maybeSingle();
@@ -20,7 +21,7 @@ export default async function EditAnnouncementPage({ params }) {
       <p className="page__eyebrow"><Link href="/content/announcements" className="muted">&larr; Announcements</Link></p>
       <h1 className="page__title" style={{ marginBottom: 24 }}>Edit announcement</h1>
       <div className="panel" style={{ padding: 22, maxWidth: 560 }}>
-        <AnnouncementForm announcement={announcement} />
+        <AnnouncementForm announcement={announcement} imageUrl={mediaPublicUrl(announcement.media?.storage_key)} />
       </div>
     </div>
   );

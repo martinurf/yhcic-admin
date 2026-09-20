@@ -206,6 +206,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .round-icon svg { width: 39px; height: 39px; stroke: currentColor; fill: none; stroke-width: 1.7; }
 .announcement-item__mark { width: 70px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .announcement-item__mark .side__mark { font-size: 12px; padding: 0.5em 0.65em; }
+.announcement-item__photo { aspect-ratio: 1 / 1; height: auto; object-fit: cover; border-radius: var(--radius); }
 .approw h3 { margin: 0 0 4px; font-size: 26px; line-height: 1.1; font-family: var(--ff-display); font-weight: 600; }
 .approw-copy { min-width: 0; }
 .approw-copy p { margin: 0; color: var(--muted); font-size: 17px; line-height: 1.55; }
@@ -254,6 +255,12 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 
 @media (max-width: 620px) {
+  /* iOS Safari auto-zooms the whole page when a focused input's
+     font-size is under 16px, and that zoom can stay stuck on the next
+     page after a redirect (e.g. accepting an invite -> the dashboard
+     loads already zoomed in). 16px on every text field sidesteps it
+     at the source instead of fighting the symptom. */
+  .fld input, .fld select, .fld textarea, .text-input { font-size: 16px; }
   .hero { min-height: 318px; padding: 17px 23px 49px; }
   .college-art { width: 68%; height: 94%; right: -12%; bottom: -12%; opacity: 0.115; }
   .monogram { font-size: 23px; padding-bottom: 8px; border-bottom-width: 1px; }

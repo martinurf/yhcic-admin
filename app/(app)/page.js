@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { mediaPublicUrl } from "@/lib/media-url";
 import Greeting from "./greeting";
 import HeroActions from "./hero-actions";
 
@@ -39,7 +40,7 @@ export default async function DashboardPage() {
       .limit(3),
     supabase
       .from("announcements")
-      .select("id, title, body, published_at")
+      .select("id, title, body, published_at, media(storage_key)")
       .eq("published", true)
       .is("deleted_at", null)
       .order("published_at", { ascending: false })
@@ -152,9 +153,17 @@ export default async function DashboardPage() {
           </div>
           {recentAnnouncement ? (
             <Link href={`/content/announcements/${recentAnnouncement.id}`} className="announcement-item">
-              <div className="announcement-item__mark" aria-hidden="true">
-                <span className="side__mark">YHCIC</span>
-              </div>
+              {mediaPublicUrl(recentAnnouncement.media?.storage_key) ? (
+                <img
+                  className="announcement-item__mark announcement-item__photo"
+                  src={mediaPublicUrl(recentAnnouncement.media?.storage_key)}
+                  alt=""
+                />
+              ) : (
+                <div className="announcement-item__mark" aria-hidden="true">
+                  <span className="side__mark">YHCIC</span>
+                </div>
+              )}
               <div>
                 <div className="announcement-titleline">
                   <h3>{recentAnnouncement.title}</h3>

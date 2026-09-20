@@ -13,7 +13,7 @@ export async function middleware(request) {
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data:",
+    "img-src 'self' data: https://*.supabase.co",
     "connect-src 'self' https://*.supabase.co",
     "object-src 'none'",
     "base-uri 'self'",
