@@ -63,7 +63,7 @@ export default async function ContentHubPage() {
   return (
     <>
       <ContentTopbar title="Content Library" pendingCount={pendingCount || 0} />
-    <div className="container flush-top" style={{ paddingLeft: 0, paddingRight: 0 }}>
+    <div className="container flush-top hub-page" style={{ paddingLeft: 0, paddingRight: 0 }}>
       <div
         className="blueprint-hub"
         style={{ aspectRatio: continueItem ? "864/1299" : "864/1115" }}
