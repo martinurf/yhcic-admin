@@ -2,18 +2,36 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { hashToken } from "@/lib/invite-token";
 import JoinForm from "./join-form";
 
-export default async function JoinPage({ params }) {
-  const { token } = await params;
+async function loadInvitation(token) {
   const admin = createAdminClient();
   const { data: invitation } = await admin
     .from("invitations")
     .select("invited_name, expires_at, accepted_at, revoked_at")
     .eq("token_hash", hashToken(token))
     .maybeSingle();
-
   const valid =
     invitation && !invitation.accepted_at && !invitation.revoked_at && new Date(invitation.expires_at) > new Date();
+  return { invitation, valid };
+}
 
+/* Personalizes what shows up when this link is pasted into iMessage,
+   WhatsApp, Slack, etc. — a plain URL doesn't say anything; this does. */
+export async function generateMetadata({ params }) {
+  const { token } = await params;
+  const { invitation, valid } = await loadInvitation(token);
+  const firstName = invitation?.invited_name?.trim().split(" ")[0];
+
+  if (!valid) return { title: "Invitation not valid — YHCIC" };
+
+  return {
+    title: firstName ? `${firstName}, you're invited to YHCIC` : "You're invited to YHCIC",
+    description: "Set up your officer account for the Young Harris College Investment Club admin panel.",
+  };
+}
+
+export default async function JoinPage({ params }) {
+  const { token } = await params;
+  const { invitation, valid } = await loadInvitation(token);
   const firstName = invitation?.invited_name?.trim().split(" ")[0] || null;
 
   return (

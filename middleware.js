@@ -26,11 +26,14 @@ export async function middleware(request) {
 
   // Public, unauthenticated routes — never gated behind admin login.
   // /join is how someone without an account yet gets one; /api/public/*
-  // is the read-only feed the public site will eventually consume.
+  // is the read-only feed the public site will eventually consume;
+  // opengraph-image must be fetchable by link-preview bots (WhatsApp,
+  // iMessage, Slack, ...), which never carry an auth cookie.
   if (
     request.nextUrl.pathname.startsWith("/api/apply") ||
     request.nextUrl.pathname.startsWith("/api/public/") ||
-    request.nextUrl.pathname.startsWith("/join")
+    request.nextUrl.pathname.startsWith("/join") ||
+    request.nextUrl.pathname.includes("opengraph-image")
   ) {
     const res = NextResponse.next({ request: { headers: requestHeaders } });
     res.headers.set("Content-Security-Policy", csp);

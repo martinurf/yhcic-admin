@@ -1,7 +1,12 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "YHCIC — Admin",
+  // Without this, Next.js resolves relative URLs (the OG image, most
+  // notably) against http://localhost:3000 — fine in dev, broken for
+  // real link previews once deployed.
+  metadataBase: new URL("https://yhcic-admin.vercel.app"),
+  title: "YHCIC — Sign in",
+  description: "Young Harris College Investment Club — officer admin panel.",
   robots: { index: false, follow: false },
 };
 

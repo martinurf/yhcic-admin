@@ -37,10 +37,20 @@ const TABS = [
 export default function Nav() {
   const pathname = usePathname();
 
+  /* Longest-prefix match, not "does it start with" — /content/members
+     starts with both "/content" and "/content/members", and without
+     this both tabs would light up together. */
+  const activeHref = TABS
+    .filter((t) => (t.href === "/" ? pathname === "/" : pathname.startsWith(t.href)))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href;
+
   return (
     <nav className="bottom-nav" aria-label="Admin navigation">
+      <Link href="/" className="side-nav__mark" aria-hidden="true">
+        <span className="side__mark">YHCIC</span>
+      </Link>
       {TABS.map((t) => {
-        const active = t.href === "/" ? pathname === "/" : pathname.startsWith(t.href);
+        const active = t.href === activeHref;
         return (
           <Link key={t.href} href={t.href} className={`nav-item${active ? " active" : ""}`}>
             <svg viewBox="0 0 24 24">{t.icon}</svg>

@@ -518,3 +518,58 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 .login__title { font-family: var(--ff-display); font-weight: 600; font-size: 26px; margin-bottom: 6px; }
 .login__sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+/* ============================================================
+   Desktop shell — a real wide-screen layout, not the mobile card
+   stretched out. Everything above this point (including the
+   max-width:620px block) is untouched; nothing below here applies
+   under 900px, so mobile renders exactly as it did before.
+   ============================================================ */
+.side-nav__mark { display: none; }
+
+@media (min-width: 900px) {
+  body { background: #efedf3; }
+
+  /* The centered 864px "phone card" becomes the real page — the
+     sidebar (a sibling of .app, see layout.js) reserves its own
+     strip on the left instead. */
+  .app {
+    max-width: none;
+    margin: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .main { margin-left: 232px; padding-bottom: 0; }
+
+  /* Reading-width content stays legible instead of stretching
+     edge-to-edge on a wide monitor; the purple hero band is allowed
+     a bit more room since it's a banner, not text. */
+  .container { max-width: 900px; }
+  .hero, .summary, .home-main { max-width: 1180px; }
+
+  /* bottom-nav -> left sidebar */
+  .bottom-nav {
+    position: fixed; z-index: 30; left: 0; top: 0; bottom: auto; transform: none;
+    width: 232px; height: 100dvh;
+    display: flex; flex-direction: column; align-items: stretch;
+    gap: 3px;
+    padding: 28px 16px;
+    background: #fff;
+    border-top: 0; border-right: 1px solid #e6e2e9;
+    box-shadow: none;
+  }
+  .side-nav__mark { display: block; margin: 0 4px 22px; }
+  .nav-item {
+    flex-direction: row; justify-content: flex-start; gap: 13px;
+    padding: 11px 12px; border-radius: 8px;
+    font-size: 14.5px;
+  }
+  .nav-item svg { width: 21px; height: 21px; }
+  .nav-item:hover { background: var(--lavender); }
+  .nav-item.active { background: var(--lavender); }
+
+  /* the floating circular menu button now sits correctly at the real
+     content's top-right instead of the old off-card viewport edge */
+  .page-menu-btn { top: 24px; right: 32px; }
+}
