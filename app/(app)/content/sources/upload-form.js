@@ -26,6 +26,16 @@ export default function UploadForm() {
         <input id="title" name="title" type="text" required />
       </div>
       <div className="fld">
+        <label htmlFor="type">Type</label>
+        <select id="type" name="type" defaultValue="NOTE">
+          <option value="ARTICLE">Article</option>
+          <option value="DATA">Data</option>
+          <option value="FILINGS">Filings</option>
+          <option value="DOCUMENT">Document</option>
+          <option value="NOTE">Note</option>
+        </select>
+      </div>
+      <div className="fld">
         <label htmlFor="description">Notes <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional</em></label>
         <textarea id="description" name="description" rows={2} />
       </div>

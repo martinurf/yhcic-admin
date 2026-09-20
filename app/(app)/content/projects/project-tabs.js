@@ -12,32 +12,33 @@ function statusOf(p) {
   return { label: "Draft", tone: "draft" };
 }
 
-function Row({ p }) {
+function Row({ p, index }) {
   const status = statusOf(p);
   const thumb = mediaPublicUrl(p.media?.storage_key);
   return (
-    <div className="list__row">
-      <Link href={`/content/projects/${p.id}`} className="list__row-link">
-        <div className="row" style={{ gap: 12, alignItems: "center" }}>
-          {thumb ? (
-            <img src={thumb} alt="" style={{ width: 44, height: 44, borderRadius: "var(--radius)", objectFit: "cover", flexShrink: 0 }} />
-          ) : null}
-          <div>
-            <span className="list__title">
-              {p.title}
-              {p.is_private ? <span className="list__title-meta"> — private</span> : null}
-            </span>
-            <p className="list__sub">{p.status}</p>
-          </div>
-        </div>
-      </Link>
-      <div className="list__row-actions">
+    <article className="work-card">
+      <span className="work-num">{String(index + 1).padStart(2, "0")}</span>
+      <div>
+        {thumb ? (
+          <img src={thumb} alt="" style={{ width: "100%", maxHeight: 160, objectFit: "cover", marginBottom: 10, borderRadius: "var(--radius)" }} />
+        ) : null}
+        <Link href={`/content/projects/${p.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+          <h3>
+            {p.title}
+            {p.is_private ? <span className="list__title-meta"> — private</span> : null}
+          </h3>
+        </Link>
+        <p>{p.status}</p>
+      </div>
+      <div className="work-card__actions">
         <span className={`badge badge--${status.tone}`}>{status.label}</span>
         {status.tone === "draft" && !p.is_private ? (
           <RequestPublishButton id={p.id} requestAction={requestProjectPublish} />
-        ) : null}
+        ) : (
+          <Link href={`/content/projects/${p.id}`} className="text-btn">Edit</Link>
+        )}
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -64,8 +65,15 @@ export default function ProjectTabs({ workspace, mine, requests }) {
         </button>
       </div>
 
-      <div className="list" style={{ marginTop: 16 }}>
-        {lists[tab].length ? lists[tab].map((p) => <Row key={p.id} p={p} />) : <p className="list__empty">{empties[tab]}</p>}
+      <div style={{ marginTop: 16 }}>
+        {lists[tab].length ? (
+          lists[tab].map((p, i) => <Row key={p.id} p={p} index={i} />)
+        ) : (
+          <p className="empty">
+            <strong>Nothing here yet</strong>
+            {empties[tab]}
+          </p>
+        )}
       </div>
     </>
   );

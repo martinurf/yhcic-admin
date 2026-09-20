@@ -8,7 +8,7 @@ export default async function AnnouncementsListPage() {
      private ones. */
   const { data: items } = await supabase
     .from("announcements")
-    .select("id, title, published, is_private, published_at, updated_at")
+    .select("id, title, body, published, is_private, published_at, updated_at, media(storage_key)")
     .is("deleted_at", null)
     .order("updated_at", { ascending: false });
 
@@ -19,13 +19,22 @@ export default async function AnnouncementsListPage() {
 
   return (
     <div className="container">
-      <div className="page__head">
-        <div>
-          <p className="page__eyebrow">Content</p>
-          <h1 className="page__title">Announcements</h1>
-          <p className="page__sub">Draft privately, work on it with the team, or publish straight to the member feed.</p>
+      <Link href="/content" className="backlink">
+        <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></svg>
+        Content library
+      </Link>
+      <div className="section-hero">
+        <div className="section-hero-row">
+          <div>
+            <p className="page__eyebrow">YHCIC workspace</p>
+            <h1>Announcements.</h1>
+            <p className="desc">
+              Share updates, events, and photos with members. Draft privately, work on it with the team, or publish
+              straight to the member feed.
+            </p>
+          </div>
+          <Link href="/content/announcements/new" className="btn btn--primary">New announcement</Link>
         </div>
-        <Link href="/content/announcements/new" className="btn btn--primary">New announcement</Link>
       </div>
 
       <AnnouncementTabs feed={feed} workspace={workspace} mine={mine} />

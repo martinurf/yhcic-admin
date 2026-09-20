@@ -10,8 +10,10 @@ export async function uploadResource(formData) {
   const admin = await requireActiveAdmin();
   if (!admin) return { error: "Not signed in." };
 
+  const ALLOWED_TYPES = ["ARTICLE", "DATA", "FILINGS", "DOCUMENT", "NOTE"];
   const title = String(formData.get("title") || "").trim();
   const description = String(formData.get("description") || "").trim() || null;
+  const type = ALLOWED_TYPES.includes(formData.get("type")) ? formData.get("type") : "NOTE";
   const file = formData.get("file");
 
   if (!title) return { error: "Title is required." };
@@ -29,6 +31,7 @@ export async function uploadResource(formData) {
   const { error: dbError } = await supabase.from("resources").insert({
     title,
     description,
+    type,
     file_name: file.name,
     storage_key: storageKey,
     content_type: file.type || null,

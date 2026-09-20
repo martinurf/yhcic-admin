@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveAdmin } from "@/lib/require-admin";
@@ -11,18 +12,20 @@ export default async function SourcesPage() {
   const admin = createAdminClient();
   const { data: resources } = await admin
     .from("resources")
-    .select("id, title, file_name, file_size, storage_key, created_at")
+    .select("id, title, type, file_name, file_size, storage_key, created_at")
     .is("deleted_at", null)
     .order("created_at", { ascending: false });
 
   return (
     <div className="container">
-      <div className="page__head">
-        <div>
-          <p className="page__eyebrow">Content</p>
-          <h1 className="page__title">Sources &amp; Research</h1>
-          <p className="page__sub">A shared library for articles, filings, datasets, and notes.</p>
-        </div>
+      <Link href="/content" className="backlink">
+        <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></svg>
+        Content library
+      </Link>
+      <div className="section-hero">
+        <p className="page__eyebrow">YHCIC workspace</p>
+        <h1>Sources &amp; Research.</h1>
+        <p className="desc">A shared library for useful articles, datasets, filings, documents, and internal notes.</p>
       </div>
 
       <p className="fld__hint" style={{ marginBottom: 14 }}>

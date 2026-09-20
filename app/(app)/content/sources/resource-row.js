@@ -30,7 +30,8 @@ export default function ResourceRow({ resource }) {
   }
 
   return (
-    <div className="list__row">
+    <div className="list__row source-row">
+      <span className="source-row__type">{resource.type || "NOTE"}</span>
       <div>
         <span className="list__title">{resource.title}</span>
         <p className="list__sub">

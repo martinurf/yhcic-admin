@@ -3,28 +3,39 @@
 import { useMemo, useState } from "react";
 import ResourceRow from "./resource-row";
 
+const TYPES = ["ARTICLE", "DATA", "FILINGS", "DOCUMENT", "NOTE"];
+
 export default function SourceList({ resources }) {
   const [query, setQuery] = useState("");
+  const [type, setType] = useState("");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return resources;
-    return resources.filter(
-      (r) => r.title.toLowerCase().includes(q) || r.file_name.toLowerCase().includes(q)
-    );
-  }, [resources, query]);
+    return resources.filter((r) => {
+      const matchesQuery = !q || r.title.toLowerCase().includes(q) || r.file_name.toLowerCase().includes(q);
+      const matchesType = !type || r.type === type;
+      return matchesQuery && matchesType;
+    });
+  }, [resources, query, type]);
 
   return (
     <>
-      {resources.length > 4 ? (
-        <input
-          className="text-input"
-          style={{ width: "100%", marginBottom: 14 }}
-          placeholder="Search sources…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          aria-label="Search sources"
-        />
+      {resources.length > 3 ? (
+        <div className="sources-tools">
+          <input
+            className="text-input"
+            placeholder="Search sources…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search sources"
+          />
+          <select value={type} onChange={(e) => setType(e.target.value)} aria-label="Filter by type">
+            <option value="">All types</option>
+            {TYPES.map((t) => (
+              <option key={t} value={t}>{t[0] + t.slice(1).toLowerCase()}</option>
+            ))}
+          </select>
+        </div>
       ) : null}
       <div className="list">
         {!filtered.length ? (

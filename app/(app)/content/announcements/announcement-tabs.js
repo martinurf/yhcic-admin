@@ -2,20 +2,21 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { mediaPublicUrl } from "@/lib/media-url";
 
-function Row({ a }) {
+function PostCard({ a }) {
+  const thumb = mediaPublicUrl(a.media?.storage_key);
   return (
-    <Link href={`/content/announcements/${a.id}`} className="list__row">
-      <div>
-        <span className="list__title">
-          {a.title}
-          {a.is_private ? <span className="list__title-meta"> — private</span> : null}
+    <Link href={`/content/announcements/${a.id}`} className="post-card" style={{ display: "block", textDecoration: "none", color: "inherit" }}>
+      <div className="post-card__head">
+        <span className={`badge badge--${a.published ? "published" : "draft"}`}>
+          {a.published ? "Published" : a.is_private ? "Private" : "Draft"}
         </span>
-        <p className="list__sub">Updated {new Date(a.updated_at).toLocaleString()}</p>
+        <span className="list__sub">Updated {new Date(a.updated_at).toLocaleDateString()}</span>
       </div>
-      <span className={`badge badge--${a.published ? "published" : "draft"}`}>
-        {a.published ? "Published" : "Draft"}
-      </span>
+      <h3 className="post-card__title">{a.title}</h3>
+      <p className="post-card__body">{a.body}</p>
+      {thumb ? <img className="post-card__image" src={thumb} alt="" /> : null}
     </Link>
   );
 }
@@ -43,8 +44,15 @@ export default function AnnouncementTabs({ feed, workspace, mine }) {
         </button>
       </div>
 
-      <div className="list" style={{ marginTop: 16 }}>
-        {lists[tab].length ? lists[tab].map((a) => <Row key={a.id} a={a} />) : <p className="list__empty">{empties[tab]}</p>}
+      <div className="feed" style={{ marginTop: 16 }}>
+        {lists[tab].length ? (
+          lists[tab].map((a) => <PostCard key={a.id} a={a} />)
+        ) : (
+          <p className="empty">
+            <strong>Nothing here yet</strong>
+            {empties[tab]}
+          </p>
+        )}
       </div>
     </>
   );

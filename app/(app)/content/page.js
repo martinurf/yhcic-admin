@@ -58,6 +58,7 @@ export default async function ContentHubPage() {
       </div>
 
       <section className="content-hero">
+        <img className="content-hero__art" src="/college-lineart.webp" alt="" aria-hidden="true" />
         <h1>
           <span>Create.</span>
           <span>Research.</span>
@@ -74,7 +75,7 @@ export default async function ContentHubPage() {
             <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></svg>
           </span>
           <span className="hub-card__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M8.5 14.5A6 6 0 1 1 15.5 14.5c-1 .7-1.5 1.4-1.5 2.5h-4c0-1.1-.5-1.8-1.5-2.5z" /></svg>
+            <svg viewBox="0 0 64 64"><path d="M20 38c-7-5-9-12-6-20C18 7 30 3 41 8s15 18 8 28c-2 3-5 5-7 7H24c-1-2-2-4-4-5Z" /><path d="M24 49h18M27 56h12M32 1v5M9 13l5 3M55 13l-5 3M5 32h7M52 32h7" /></svg>
           </span>
           <h2>Projects</h2>
           <p>Plan, write, and collaborate on club initiatives.</p>
@@ -87,7 +88,7 @@ export default async function ContentHubPage() {
             <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></svg>
           </span>
           <span className="hub-card__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="m3 11 14-5v12L3 13z" /><path d="M11 16v4H7l-1-6M20 9v6" /></svg>
+            <svg viewBox="0 0 64 64"><path d="M10 27v15h10l26 11V15L20 27Z" /><path d="M46 28h8v12h-8M19 42l4 13h10l-5-10" /></svg>
           </span>
           <h2>Announcements</h2>
           <p>Share news, updates, and events with members.</p>
@@ -100,7 +101,7 @@ export default async function ContentHubPage() {
             <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></svg>
           </span>
           <span className="hub-card__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4" /><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" /></svg>
+            <svg viewBox="0 0 64 64"><path d="M5 13c11-5 19-3 27 4v39c-8-7-16-9-27-4ZM59 13c-11-5-19-3-27 4v39c8-7 16-9 27-4Z" /><path d="M10 20c7-2 13 0 18 4M54 20c-7-2-13 0-18 4" /></svg>
           </span>
           <h2>Sources &amp; Research</h2>
           <p>Save articles, documents, and notes.</p>
@@ -110,7 +111,7 @@ export default async function ContentHubPage() {
         <span className="hub-card disabled" aria-hidden="true">
           <span className="hub-card__index">04</span>
           <span className="hub-card__icon">
-            <svg viewBox="0 0 24 24"><path d="M4 20h16M8 20V9M14 20V5M20 20v-7" /><rect x="17" y="4" width="6" height="6" rx="1" /></svg>
+            <svg viewBox="0 0 64 64"><path d="M8 52h12V35H8ZM26 52h12V24H26ZM44 52h12V10H44Z" /><rect x="43" y="37" width="17" height="16" rx="2" /><path d="M47 37v-5a5 5 0 0 1 10 0v5" /></svg>
           </span>
           <h2>Portfolio</h2>
           <p>Showcase our best work (coming soon).</p>

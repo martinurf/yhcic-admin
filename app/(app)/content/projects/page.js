@@ -21,18 +21,23 @@ export default async function ProjectsListPage() {
 
   return (
     <div className="container">
-      <div className="page__head">
-        <div>
-          <p className="page__eyebrow">Content</p>
-          <h1 className="page__title">Current projects</h1>
-          <p className="page__sub">Plan, write, and collaborate — privately, until it's ready for the club or the public site.</p>
+      <Link href="/content" className="backlink">
+        <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></svg>
+        Content library
+      </Link>
+      <div className="section-hero">
+        <div className="section-hero-row">
+          <div>
+            <p className="page__eyebrow">YHCIC workspace</p>
+            <h1>Projects.</h1>
+            <p className="desc">
+              Plan, write, and collaborate privately. When the work is ready, send a separate request for review
+              before it reaches the official public site. {publishedCount} of {all.length} published so far.
+            </p>
+          </div>
+          <Link href="/content/projects/new" className="btn btn--primary">New project</Link>
         </div>
-        <Link href="/content/projects/new" className="btn btn--primary">New project</Link>
       </div>
-
-      <p className="fld__hint" style={{ marginBottom: 14 }}>
-        {publishedCount} of {all.length} published to the public site.
-      </p>
 
       <ProjectTabs workspace={workspace} mine={mine} requests={requests} />
     </div>
