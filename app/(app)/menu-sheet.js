@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useMenu } from "./menu-context";
 
-export default function MenuSheet({ profile, onSignOut, requestCount = 0 }) {
+export default function MenuSheet({ profile, onSignOut, isOwner = false }) {
   const { open, setOpen } = useMenu();
 
   useEffect(() => {
@@ -37,10 +37,11 @@ export default function MenuSheet({ profile, onSignOut, requestCount = 0 }) {
         <Link href="/content/sources" className="sheet__link" onClick={() => setOpen(false)}>
           Sources &amp; research
         </Link>
-        <Link href="/requests" className="sheet__link" onClick={() => setOpen(false)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          Requests
-          {requestCount > 0 ? <span className="badge badge--pending">{requestCount}</span> : null}
-        </Link>
+        {isOwner ? (
+          <Link href="/requests" className="sheet__link" onClick={() => setOpen(false)}>
+            Requests
+          </Link>
+        ) : null}
 
         <div className="sheet__foot">
           <p className="sheet__who">

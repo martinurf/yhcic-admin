@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { requireActiveAdmin } from "@/lib/require-admin";
+import { requireOwner } from "@/lib/require-admin";
 import ResolveButtons from "./resolve-buttons";
 
 export default async function RequestsPage() {
-  const me = await requireActiveAdmin();
-  if (!me) redirect("/login");
+  const me = await requireOwner();
+  if (!me) redirect("/");
 
   const supabase = await createClient();
   const [{ data: memberRequests }, { data: projectRequests }] = await Promise.all([

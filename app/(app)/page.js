@@ -68,7 +68,7 @@ export default async function DashboardPage() {
           Tomorrows
         </p>
         <div className="hero-copy">
-          <p className="eyebrow">Officer overview</p>
+          <p className="eyebrow">Member overview</p>
           <Greeting name={firstName} />
           <p className="motto">Students. Ideas. Impact.</p>
           <div className="small-rule" />
@@ -151,12 +151,8 @@ export default async function DashboardPage() {
           </div>
           {recentAnnouncement ? (
             <Link href={`/content/announcements/${recentAnnouncement.id}`} className="announcement-item">
-              <div className="round-icon round-icon--brand" aria-hidden="true">
-                <span>
-                  YHC
-                  <br />
-                  IC
-                </span>
+              <div className="announcement-item__mark" aria-hidden="true">
+                <span className="side__mark">YHCIC</span>
               </div>
               <div>
                 <div className="announcement-titleline">

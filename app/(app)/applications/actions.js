@@ -19,7 +19,7 @@ export async function updateStatus(applicationId, newStatus) {
 
   const { data: current, error: readError } = await supabase
     .from("applications")
-    .select("status")
+    .select("status, name, major, phone")
     .eq("id", applicationId)
     .maybeSingle();
   if (readError || !current) return { error: "Application not found." };
@@ -36,6 +36,28 @@ export async function updateStatus(applicationId, newStatus) {
     new_status: newStatus,
     changed_by: user.id,
   });
+
+  /* Accepting an application seeds a draft member with what we already
+     know, instead of making the officer retype it. The unique index on
+     source_application_id makes this idempotent — accept/reject/accept
+     again can't spawn a second draft, so a duplicate-key error here is
+     expected and silently ignored rather than surfaced as a failure. */
+  if (newStatus === "accepted") {
+    const { error: memberError } = await supabase.from("members").insert({
+      name: current.name,
+      role: "Member",
+      major: current.major,
+      phone: current.phone,
+      published: false,
+      source_application_id: applicationId,
+      created_by: user.id,
+      updated_by: user.id,
+    });
+    if (memberError && memberError.code !== "23505") {
+      console.error("Draft member creation failed:", memberError.message);
+    }
+    revalidatePath("/content/members");
+  }
 
   revalidatePath("/applications");
   revalidatePath(`/applications/${applicationId}`);
