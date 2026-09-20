@@ -27,6 +27,7 @@ export default function AnnouncementForm({ announcement, imageUrl }) {
   const [preview, setPreview] = useState(imageUrl || null);
   const [removeImage, setRemoveImage] = useState(false);
   const [imageDims, setImageDims] = useState(null);
+  const [published, setPublished] = useState(!!announcement?.published);
 
   async function onImageChange(e) {
     const file = e.target.files?.[0];
@@ -121,10 +122,31 @@ export default function AnnouncementForm({ announcement, imageUrl }) {
         <p className="fld__hint">JPEG, PNG, or WebP — up to 8MB. Shown below the text when someone opens the full post — the YHCIC mark stays as the poster's identity either way.</p>
       </div>
 
+      <label className="row" style={{ fontSize: 13.5, opacity: published ? 0.5 : 1 }}>
+        <input
+          type="checkbox"
+          name="isPrivate"
+          defaultChecked={announcement?.is_private}
+          disabled={published}
+          style={{ width: "auto" }}
+        />
+        Private draft — only you can see this
+      </label>
+      <p className="fld__hint" style={{ marginTop: -10 }}>
+        Leave unchecked to share it with every officer in the club workspace right away.
+      </p>
+
       <label className="row" style={{ fontSize: 13.5 }}>
-        <input type="checkbox" name="published" defaultChecked={announcement?.published} style={{ width: "auto" }} />
+        <input
+          type="checkbox"
+          name="published"
+          checked={published}
+          onChange={(e) => setPublished(e.target.checked)}
+          style={{ width: "auto" }}
+        />
         Published
       </label>
+      {published ? <p className="fld__hint" style={{ marginTop: -10 }}>Publishing always shares it — a published announcement can't stay private.</p> : null}
 
       {error ? <p className="status-text" data-tone="err">{error}</p> : null}
 

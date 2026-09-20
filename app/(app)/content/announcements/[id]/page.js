@@ -25,10 +25,15 @@ export default async function EditAnnouncementPage({ params }) {
   const isAuthor = announcement.created_by === me.id;
   const imageUrl = mediaPublicUrl(announcement.media?.storage_key);
 
-  /* Only the officer who posted it gets the edit form — everyone else
-     just reads it, like a forum post, with no way to change or remove
-     someone else's announcement. */
-  if (!isAuthor) {
+  /* Published = official and out to members — only the author can
+     touch it after that, everyone else gets a read-only forum-post
+     view. A shared (not private, not yet published) draft is exactly
+     the opposite: it's the collaborative club workspace, so any
+     officer who can see it can also help write it. A private draft
+     never reaches this branch at all — RLS already hid the row from
+     anyone but its creator before the query above even ran. */
+  const canEdit = isAuthor || !announcement.published;
+  if (!canEdit) {
     /* RLS on admin_profiles only lets an officer read their own row
        (admin_can_read_own_profile) — legitimate for privacy, but it
        means the session-scoped client can't resolve anyone else's
