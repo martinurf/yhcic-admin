@@ -7,12 +7,14 @@ export default async function JoinPage({ params }) {
   const admin = createAdminClient();
   const { data: invitation } = await admin
     .from("invitations")
-    .select("expires_at, accepted_at, revoked_at")
+    .select("invited_name, expires_at, accepted_at, revoked_at")
     .eq("token_hash", hashToken(token))
     .maybeSingle();
 
   const valid =
     invitation && !invitation.accepted_at && !invitation.revoked_at && new Date(invitation.expires_at) > new Date();
+
+  const firstName = invitation?.invited_name?.trim().split(" ")[0] || null;
 
   return (
     <div className="login">
@@ -20,9 +22,16 @@ export default async function JoinPage({ params }) {
         <span className="side__mark" style={{ marginBottom: 22 }}>YHCIC</span>
         {valid ? (
           <>
-            <h1 className="login__title">Welcome</h1>
-            <p className="login__sub">You've been invited as a YHCIC officer. Set a username and password to get in.</p>
+            <h1 className="login__title">{firstName ? `Congratulations, ${firstName}!` : "Welcome"}</h1>
+            <p className="login__sub">
+              {firstName
+                ? "You've received the link to create your YHCIC account. Set a username and password to get in."
+                : "You've been invited as a YHCIC officer. Set a username and password to get in."}
+            </p>
             <JoinForm token={token} />
+            <p className="fld__hint" style={{ marginTop: 18 }}>
+              Invitation-only — this link was sent to you specifically, works once, and expires in 7 days.
+            </p>
           </>
         ) : (
           <>
