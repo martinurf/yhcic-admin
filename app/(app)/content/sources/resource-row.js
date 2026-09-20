@@ -29,24 +29,26 @@ export default function ResourceRow({ resource }) {
     });
   }
 
+  const openLink = resource.url ? () => window.open(resource.url, "_blank", "noopener") : onDownload;
+  const sub = [
+    resource.url ? new URL(resource.url).hostname.replace(/^www\./, "") : resource.file_name,
+    resource.file_size ? formatSize(resource.file_size) : null,
+    new Date(resource.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+  ].filter(Boolean).join(" · ");
+
   return (
-    <div className="list__row source-row">
-      <span className="source-row__type">{resource.type || "NOTE"}</span>
+    <article className="source-card" data-source-card>
+      <div className="source-type">{resource.type || "NOTE"}</div>
       <div>
-        <span className="list__title">{resource.title}</span>
-        <p className="list__sub">
-          {resource.file_name} {resource.file_size ? `· ${formatSize(resource.file_size)}` : ""} &middot;{" "}
-          {new Date(resource.created_at).toLocaleDateString()}
-        </p>
+        <h3>{resource.title}</h3>
+        <p>{resource.description || sub}</p>
       </div>
-      <span className="row" style={{ gap: 10 }}>
-        <button type="button" className="btn btn--sm" disabled={pending} onClick={onDownload}>
-          Download
-        </button>
-        <button type="button" className="btn btn--sm btn--danger" disabled={pending} onClick={onDelete}>
-          Remove
-        </button>
-      </span>
-    </div>
+      <button type="button" className="source-link" disabled={pending} onClick={openLink} aria-label={`Open ${resource.title}`}>
+        <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></svg>
+      </button>
+      <button type="button" className="text-btn" disabled={pending} onClick={onDelete} style={{ gridColumn: "2", justifySelf: "start" }}>
+        Remove
+      </button>
+    </article>
   );
 }

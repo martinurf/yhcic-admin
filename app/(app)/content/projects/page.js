@@ -11,7 +11,7 @@ export default async function ProjectsListPage() {
        else's private draft out of the list. */
     supabase
       .from("projects")
-      .select("id, title, status, published, is_private, requested_at, updated_at, media(storage_key)")
+      .select("id, title, status, published, is_private, requested_at, updated_at, media(storage_key), author:admin_profiles!created_by(display_name, username)")
       .is("deleted_at", null)
       .order("sort_order", { ascending: true }),
     supabase.from("applications").select("id", { count: "exact", head: true }).eq("status", "pending"),
@@ -27,11 +27,11 @@ export default async function ProjectsListPage() {
     <>
       <ContentTopbar title="Projects" pendingCount={pendingCount || 0} />
       <div className="container flush-top">
-        <Link href="/content" className="backlink">
-          <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></svg>
-          Content library
-        </Link>
         <div className="section-hero">
+          <Link href="/content" className="backlink">
+            <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6" /></svg>
+            Content library
+          </Link>
           <div className="section-hero-row">
             <div>
               <p className="page__eyebrow">YHCIC workspace</p>
@@ -41,7 +41,10 @@ export default async function ProjectsListPage() {
                 before it reaches the official public site. {publishedCount} of {all.length} published so far.
               </p>
             </div>
-            <Link href="/content/projects/new" className="btn btn--primary">New project</Link>
+            <Link href="/content/projects/new" className="primary">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
+              <span>New project</span>
+            </Link>
           </div>
         </div>
 

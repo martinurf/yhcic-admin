@@ -26,6 +26,10 @@ export default function UploadForm() {
         <input id="title" name="title" type="text" required />
       </div>
       <div className="fld">
+        <label htmlFor="url">Link <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional if you attach a file</em></label>
+        <input id="url" name="url" type="url" placeholder="https://" />
+      </div>
+      <div className="fld">
         <label htmlFor="type">Type</label>
         <select id="type" name="type" defaultValue="NOTE">
           <option value="ARTICLE">Article</option>
@@ -40,15 +44,15 @@ export default function UploadForm() {
         <textarea id="description" name="description" rows={2} />
       </div>
       <div className="fld">
-        <label htmlFor="file">File <em style={{ fontStyle: "normal", opacity: 0.6 }}>up to 25MB</em></label>
-        <input id="file" name="file" type="file" required />
+        <label htmlFor="file">File <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional, up to 25MB</em></label>
+        <input id="file" name="file" type="file" />
       </div>
 
       {error ? <p className="status-text" data-tone="err">{error}</p> : null}
 
       <div className="form__actions">
         <button className="btn btn--primary" type="submit" disabled={pending}>
-          {pending ? "Uploading…" : "Upload"}
+          {pending ? "Saving…" : "Save"}
         </button>
       </div>
     </form>

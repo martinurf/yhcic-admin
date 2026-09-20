@@ -19,8 +19,8 @@ export default function RequestPublishButton({ id, requestAction }) {
   }
 
   return (
-    <button type="button" className="btn btn--sm" disabled={pending} onClick={onClick}>
-      {pending ? "Sending…" : "Send request"}
+    <button type="button" className="text-btn" disabled={pending} onClick={onClick}>
+      {pending ? "Sending…" : "Request public"}
     </button>
   );
 }
