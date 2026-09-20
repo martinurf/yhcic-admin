@@ -52,7 +52,7 @@ export default function SourceList({ resources, commentsByResource, originTitleB
               resource={r}
               comments={commentsByResource[r.id] || []}
               originTitle={r.forked_from_id ? originTitleById[r.forked_from_id] : null}
-              canEdit={Boolean(me) && (!r.forked_from_id || r.uploaded_by === me.id)}
+              canEdit={Boolean(me) && r.uploaded_by === me.id}
             />
           ))
         )}

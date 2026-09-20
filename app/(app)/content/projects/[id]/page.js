@@ -25,8 +25,7 @@ export default async function EditProjectPage({ params }) {
      that confirms something exists there. */
   if (!project) notFound();
 
-  const isFork = Boolean(project.forked_from_id);
-  const canEdit = me && (!isFork || project.created_by === me.id);
+  const canEdit = Boolean(me) && project.created_by === me.id;
 
   const [forks, comments] = await Promise.all([
     loadForks(supabase, "projects", id),
@@ -47,7 +46,7 @@ export default async function EditProjectPage({ params }) {
           <ProjectForm project={project} imageUrl={mediaPublicUrl(project.media?.storage_key)} />
         ) : (
           <div className="stack">
-            <p className="fld__hint">This is {project.original ? "a copy someone else made" : "someone else's copy"} — only they can edit it. You can still comment below.</p>
+            <p className="fld__hint">Only whoever {project.original ? "made this copy" : "created this"} can edit it — make your own copy below, or leave a comment.</p>
             <div className="fld"><label>Status</label><p>{project.status}</p></div>
             <div className="fld"><label>Description</label><p style={{ whiteSpace: "pre-wrap" }}>{project.body}</p></div>
             {project.notes ? <div className="fld"><label>Notes</label><p style={{ whiteSpace: "pre-wrap" }}>{project.notes}</p></div> : null}

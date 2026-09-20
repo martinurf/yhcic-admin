@@ -70,9 +70,9 @@ export async function updateResource(id, formData) {
   const ALLOWED_TYPES = ["ARTICLE", "DATA", "FILINGS", "DOCUMENT", "NOTE"];
   const supabase = createAdminClient();
 
-  const { data: resource } = await supabase.from("resources").select("uploaded_by, forked_from_id, storage_key").eq("id", id).maybeSingle();
+  const { data: resource } = await supabase.from("resources").select("uploaded_by, storage_key").eq("id", id).maybeSingle();
   if (!resource) return { error: "Not found." };
-  if (resource.forked_from_id && resource.uploaded_by !== admin.id) return { error: "Only whoever made this copy can edit it." };
+  if (resource.uploaded_by !== admin.id) return { error: "Only whoever added this can edit it — make your own copy instead." };
 
   const title = String(formData.get("title") || "").trim();
   const description = String(formData.get("description") || "").trim() || null;

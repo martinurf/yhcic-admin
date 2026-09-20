@@ -49,14 +49,11 @@ export default async function SourcesPage() {
               <h1>Sources &amp; Research.</h1>
               <p className="desc">A shared library for useful articles, datasets, filings, documents, and internal notes. Private to officers — never shown on the public site.</p>
             </div>
+            <UploadForm />
           </div>
         </div>
 
         <div className="workspace">
-          <div className="panel" style={{ padding: 20, marginBottom: 28 }}>
-            <UploadForm />
-          </div>
-
           <SourceList resources={resources || []} commentsByResource={commentsByResource} originTitleById={originTitleById} me={me} />
         </div>
       </div>
