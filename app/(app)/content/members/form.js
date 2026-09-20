@@ -53,8 +53,8 @@ export default function MemberForm({ member }) {
         </div>
       </div>
       <div className="fld">
-        <label htmlFor="linkedin">LinkedIn <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional</em></label>
-        <input id="linkedin" name="linkedin" type="url" placeholder="https://linkedin.com/in/…" defaultValue={member?.linkedin || ""} />
+        <label htmlFor="phone">Phone <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional</em></label>
+        <input id="phone" name="phone" type="tel" placeholder="(706) 555-0123" defaultValue={member?.phone || ""} />
       </div>
 
       <label className="row" style={{ fontSize: 13.5 }}>

@@ -1,5 +1,6 @@
 import { after } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { buildApplicationEmailHtml } from "@/lib/email/application-notice";
 
 /* Owned membership-application intake. The public site posts here
    instead of (or alongside, during a transition) Formspree. RLS has
@@ -99,6 +100,9 @@ async function notifyOfficers(admin, id, data) {
     data.experience || "—",
   ].join("\n");
 
+  const applicationUrl = `https://yhcic-admin.vercel.app/applications/${id}`;
+  const html = buildApplicationEmailHtml(data, applicationUrl);
+
   let ok = false;
   let errorCode = null;
   try {
@@ -112,6 +116,7 @@ async function notifyOfficers(admin, id, data) {
         to,
         subject: `New YHCIC application — ${data.name}`,
         text,
+        html,
       }),
     });
     ok = res.ok;

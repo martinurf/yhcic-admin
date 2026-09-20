@@ -11,13 +11,10 @@ export async function saveMember(id, formData) {
     role: String(formData.get("role") || "").trim(),
     major: String(formData.get("major") || "").trim() || null,
     focus: String(formData.get("focus") || "").trim() || null,
-    linkedin: String(formData.get("linkedin") || "").trim() || null,
+    phone: String(formData.get("phone") || "").trim() || null,
     published: formData.get("published") === "on",
   };
   if (!data.name) return { error: "Name is required." };
-  if (data.linkedin && !/^https:\/\/.+\..+/.test(data.linkedin)) {
-    return { error: "LinkedIn must be a full https:// URL." };
-  }
   return saveContent(TABLE, id, data, PATH);
 }
 

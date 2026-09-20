@@ -24,7 +24,7 @@ export default async function JoinPage({ params }) {
               {invitation.invited_name ? `Welcome, ${invitation.invited_name}` : "Welcome"}
             </h1>
             <p className="login__sub">You've been invited as a YHCIC officer. Set a username and password to get in.</p>
-            <JoinForm token={token} suggestedName={invitation.invited_name} />
+            <JoinForm token={token} />
           </>
         ) : (
           <>
