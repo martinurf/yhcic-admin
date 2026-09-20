@@ -16,6 +16,7 @@ export default async function ContentHubPage() {
         <div>
           <p className="page__eyebrow">Content</p>
           <h1 className="page__title">Content</h1>
+          <p className="page__sub">Publish your projects, sources, and announcements — or save them as drafts first.</p>
         </div>
       </div>
 

@@ -109,6 +109,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 .page__eyebrow { font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple); margin-bottom: 8px; }
 .page__title { font-family: var(--ff-display); font-weight: 500; font-size: clamp(24px, 3vw, 32px); }
+.page__sub { font-family: var(--ff-ui); font-size: 13px; color: var(--muted); margin: 5px 0 0; }
 
 .page-menu-btn {
   position: fixed; z-index: 44; top: calc(16px + env(safe-area-inset-top, 0px)); right: 16px;

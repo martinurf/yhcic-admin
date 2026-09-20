@@ -17,6 +17,7 @@ export default async function MembersListPage() {
         <div>
           <p className="page__eyebrow">Content</p>
           <h1 className="page__title">Members</h1>
+          <p className="page__sub">Members of YHCIC.</p>
         </div>
         <Link href="/content/members/new" className="btn btn--primary">New member</Link>
       </div>

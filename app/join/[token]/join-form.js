@@ -14,6 +14,10 @@ export default function JoinForm({ token }) {
     startTransition(async () => {
       const res = await acceptInvite(token, formData);
       if (res?.error) setError(res.error);
+      else if (res?.ok) {
+        // Hard navigation on purpose — see the comment in actions.js.
+        window.location.href = res.next || "/";
+      }
     });
   }
 

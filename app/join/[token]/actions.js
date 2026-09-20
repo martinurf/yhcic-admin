@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { hashToken } from "@/lib/invite-token";
@@ -68,11 +67,13 @@ export async function acceptInvite(token, formData) {
   // make them type it again on a separate screen.
   const supabase = await createClient();
   const { error: signInError } = await supabase.auth.signInWithPassword({ email: invitation.email, password });
-  if (signInError) {
-    // Account exists and is usable either way — this only affects whether
-    // they land in the panel or have to sign in once themselves.
-    redirect("/login");
-  }
 
-  redirect("/");
+  /* Returning here (instead of calling redirect()) so the client does a
+     real, hard navigation — see join-form.js. A Server Action's own
+     redirect() is a soft, History-API transition, and iOS Safari
+     doesn't reset the page's zoom/scroll for that kind of navigation —
+     only for an actual document load. That's what was landing people
+     on the dashboard still zoomed in and scrolled to wherever the
+     password field had been. */
+  return { ok: true, next: signInError ? "/login" : "/" };
 }

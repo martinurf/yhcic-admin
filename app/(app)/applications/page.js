@@ -22,6 +22,7 @@ export default async function ApplicationsPage({ searchParams }) {
         <div>
           <p className="page__eyebrow">Membership</p>
           <h1 className="page__title">Applications</h1>
+          <p className="page__sub">Applications received and pending — review, accept, or reject.</p>
         </div>
       </div>
 
