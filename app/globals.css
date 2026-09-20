@@ -784,20 +784,27 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .mn-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .mn-avatar--leader { left: 5.8%; top: 33%; width: 26.3%; height: 16.65%; }
 .mn-patch { position: absolute; z-index: 5; background: #fff; display: flex; align-items: center; overflow: hidden; }
-.mn-patch--name { left: 34%; top: 32.7%; width: 46%; height: 5%; }
-.mn-patch--role { left: 34%; top: 37.4%; width: 42%; height: 3.2%; }
-.mn-patch--major { left: 34%; top: 41.5%; width: 42%; height: 3.4%; }
-.mn-patch--class { left: 34%; top: 45.8%; width: 40%; height: 2.6%; }
+/* Widths capped so these never cross ~70% — the tagline column
+   ("Students. / Markets. / A Stronger Tomorrow.") starts at ~72.2%
+   and was getting partially covered/overlapped before this. */
+.mn-patch--name { left: 33%; top: 32.5%; width: 38%; height: 5.6%; }
+.mn-patch--role { left: 33%; top: 37.4%; width: 36%; height: 3.2%; }
+.mn-patch--major { left: 33%; top: 41.3%; width: 36%; height: 3.6%; }
+.mn-patch--class { left: 33%; top: 45.6%; width: 34%; height: 2.8%; }
 .mn-name { font-family: var(--ff-display); font-weight: 500; font-size: clamp(1.05rem, 5.5vw, 1.4rem); line-height: 1; letter-spacing: -.02em; }
 .mn-role { font-family: var(--ff-display); font-style: italic; font-size: clamp(.68rem, 3.4vw, .88rem); color: var(--purple); }
 .mn-field { font-size: clamp(.66rem, 3.2vw, .82rem); }
 .mn-class { font-family: var(--ff-mono); font-size: clamp(.52rem, 2.4vw, .62rem); letter-spacing: .1em; color: var(--muted); }
 .mn-add { display: inline-block; padding: 2px 7px; color: #a39cab; background: #f4f1f6; font-size: clamp(.6rem, 2.8vw, .7rem); font-style: italic; }
-.mn-count { left: 16.2%; top: 59.05%; width: 22%; height: 2.6%; padding: 0 4px; color: #403650; letter-spacing: .12em; font-size: clamp(7px, 2vw, 9.5px); white-space: nowrap; }
-.mn-count--equity { left: 16.2%; top: 59.05%; }
-.mn-count--markets { left: 62.8%; top: 59.05%; }
-.mn-count--operations { left: 16.2%; top: 66.68%; }
-.mn-count--communications { left: 62.8%; top: 66.68%; }
+/* Full coverage over the baked member-count text underneath — the
+   bottom row (Operations/Communications) had almost no clearance to
+   its card's own bottom border, so a taller patch read as bleeding
+   past it; shifted up 0.15% and made 0.3% shorter to fix that. */
+.mn-count { left: 15.8%; top: 58.9%; width: 24%; height: 2.3%; padding: 0 4px; color: #403650; letter-spacing: .12em; font-size: clamp(7px, 2vw, 9.5px); white-space: nowrap; }
+.mn-count--equity { left: 15.8%; top: 58.9%; }
+.mn-count--markets { left: 62.4%; top: 58.9%; }
+.mn-count--operations { left: 15.8%; top: 66.4%; }
+.mn-count--communications { left: 62.4%; top: 66.4%; }
 .mn-all-members { position: absolute; z-index: 5; left: 3.7%; top: 70.6%; width: 92.7%; height: 20.9%; background: #fff; display: flex; flex-direction: column; }
 .mn-all-members header { height: 20%; display: flex; align-items: center; justify-content: space-between; padding: 0 1%; }
 .mn-all-members h2 { margin: 0; font-family: var(--ff-ui); font-weight: 700; font-size: clamp(.62rem, 2.9vw, .78rem); letter-spacing: .2em; text-transform: uppercase; }
