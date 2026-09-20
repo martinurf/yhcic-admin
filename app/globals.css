@@ -761,27 +761,58 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .blueprint-bell-mask { position: absolute; z-index: 1; left: 82.5%; top: 1.1%; width: 2.3%; height: 1.4%; background: #fff; border-radius: 50%; }
 }
 
-/* ---------- Member Network (measured off "plano members.jpg") ----------
-   Own hero — NOT a reuse of .content-hero. The blueprint's background
-   here is plain white (measured: 253-255 everywhere), so no gradient
-   wash; and the tower photo's own crop/position/height is different
-   from the Content hub's, measured separately below. The LEADERSHIP
-   heading row lives INSIDE this hero (not below it) because the photo
-   bleeds behind that row too in the blueprint, stopping only at the
-   card's own opaque background. */
-.members-hero { position: relative; padding: 8px clamp(20px, 5.5vw, 50px) 0; overflow: hidden; isolation: isolate; }
-.members-hero__art {
-  position: absolute; z-index: -1; right: 0; top: 11.57vw; width: 46.18vw; height: 45.72vw;
-  object-fit: cover; object-position: center 20%;
-  opacity: 0.16;
-  filter: grayscale(1) brightness(0.35) sepia(1) hue-rotate(228deg) saturate(6);
+/* ---------- Member Network hub — exact copy of
+   member-network-blueprint.jpeg, ported the same way as the Content
+   hub: the reference's own index.html renders this flat image with
+   overlays (leader-avatar, count labels, member-replacement), not CSS —
+   see YHCIC_Member_Network_Final/styles.css. Positions below are its
+   percentages, copied verbatim; only the .count font-size was
+   overridden (its reference value comes out under 5px on a real
+   phone — the later, unconditional rule in that stylesheet
+   accidentally clobbers its own mobile override). ---------- */
+.mn-hub { position: relative; width: 100%; overflow: hidden; }
+.mn-hub__inner { position: absolute; left: 0; width: 100%; aspect-ratio: 864 / 1536; }
+.mn-hub__inner img { width: 100%; height: 100%; display: block; }
+.mn-hit { position: absolute; z-index: 6; display: block; }
+.mn-hit--leadership { left: 3.7%; top: 31.9%; width: 92.8%; height: 18.8%; }
+.mn-hit--team0 { left: 3.7%; top: 55%; width: 45.6%; height: 6.8%; }
+.mn-hit--team1 { left: 50.8%; top: 55%; width: 45.7%; height: 6.8%; }
+.mn-hit--team2 { left: 3.7%; top: 62.6%; width: 45.6%; height: 6.8%; }
+.mn-hit--team3 { left: 50.8%; top: 62.6%; width: 45.7%; height: 6.8%; }
+.mn-avatar { position: absolute; z-index: 4; background: #f0edf3; display: grid; place-items: center; color: #9b94a3; border: 1px solid #dad5df; overflow: hidden; }
+.mn-avatar svg { width: 54%; height: 54%; fill: none; stroke: currentColor; stroke-width: 2.6; }
+.mn-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mn-avatar--leader { left: 5.8%; top: 33%; width: 26.3%; height: 16.65%; }
+.mn-patch { position: absolute; z-index: 5; background: #fff; display: flex; align-items: center; overflow: hidden; }
+.mn-patch--name { left: 34%; top: 32.7%; width: 46%; height: 5%; }
+.mn-patch--role { left: 34%; top: 37.4%; width: 42%; height: 3.2%; }
+.mn-patch--major { left: 34%; top: 41.5%; width: 42%; height: 3.4%; }
+.mn-patch--class { left: 34%; top: 45.8%; width: 40%; height: 2.6%; }
+.mn-name { font-family: var(--ff-display); font-weight: 500; font-size: clamp(1.05rem, 5.5vw, 1.4rem); line-height: 1; letter-spacing: -.02em; }
+.mn-role { font-family: var(--ff-display); font-style: italic; font-size: clamp(.68rem, 3.4vw, .88rem); color: var(--purple); }
+.mn-field { font-size: clamp(.66rem, 3.2vw, .82rem); }
+.mn-class { font-family: var(--ff-mono); font-size: clamp(.52rem, 2.4vw, .62rem); letter-spacing: .1em; color: var(--muted); }
+.mn-add { display: inline-block; padding: 2px 7px; color: #a39cab; background: #f4f1f6; font-size: clamp(.6rem, 2.8vw, .7rem); font-style: italic; }
+.mn-count { left: 16.2%; top: 59.05%; width: 22%; height: 2.6%; padding: 0 4px; color: #403650; letter-spacing: .12em; font-size: clamp(7px, 2vw, 9.5px); white-space: nowrap; }
+.mn-count--equity { left: 16.2%; top: 59.05%; }
+.mn-count--markets { left: 62.8%; top: 59.05%; }
+.mn-count--operations { left: 16.2%; top: 66.68%; }
+.mn-count--communications { left: 62.8%; top: 66.68%; }
+.mn-all-members { position: absolute; z-index: 5; left: 3.7%; top: 70.6%; width: 92.7%; height: 20.9%; background: #fff; display: flex; flex-direction: column; }
+.mn-all-members header { height: 20%; display: flex; align-items: center; justify-content: space-between; padding: 0 1%; }
+.mn-all-members h2 { margin: 0; font-family: var(--ff-ui); font-weight: 700; font-size: clamp(.62rem, 2.9vw, .78rem); letter-spacing: .2em; text-transform: uppercase; }
+.mn-all-members__action { color: #3c2655; font-family: var(--ff-mono); font-size: clamp(.55rem, 2.5vw, .68rem); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; }
+.mn-all-members__action span { margin-left: 6px; }
+.mn-member-list { flex: 1; overflow: hidden; }
+.mn-member-row {
+  width: 100%; height: 33.34%; padding: 0 1%; border-top: 1px solid #e5e1e8; background: #fff;
+  display: grid; grid-template-columns: 9.5% 1fr 6%; align-items: center; text-align: left; text-decoration: none; color: inherit;
 }
-.members-hero h1 { max-width: 620px; margin: 0; font-family: var(--ff-display); font-weight: 500; font-size: clamp(2.6rem, 12vw, 3.4rem); line-height: .84; letter-spacing: -.065em; }
-.members-hero h1 span { display: block; white-space: nowrap; }
-.members-hero .hero-rule { width: 60px; height: 2px; margin: 27px 0 17px; background: var(--purple); }
-.members-hero p.sub { margin: 0; color: var(--muted); text-transform: uppercase; letter-spacing: .25em; font-size: 12px; font-weight: 600; }
-.members-hero__leadership-row { margin: 0; padding: 20px 0 16px; position: relative; z-index: 1; }
-@media (max-width: 680px) { .members-hero { padding-bottom: 0; } }
+.mn-member-row .mn-avatar--row { position: static; width: 80%; aspect-ratio: 1; border-radius: 50%; }
+.mn-member-row__copy { display: block; padding-left: 2%; min-width: 0; }
+.mn-member-row__copy strong { display: block; font: 500 clamp(.95rem, 4.6vw, 1.15rem)/1.05 var(--ff-display); letter-spacing: -.02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mn-member-row__copy small { display: block; margin-top: 3px; color: #544b66; font-family: var(--ff-mono); font-size: clamp(.55rem, 2.4vw, .68rem); letter-spacing: .1em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mn-member-row__arrow { color: #4c1f70; font-size: clamp(1rem, 4.5vw, 1.3rem); text-align: right; }
 
 /* Photo sits flush against the card's own left/top/bottom edges (no
    padding around it at all) — measured directly off plano members.jpg:
@@ -816,21 +847,6 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .leadership-card__tagline { width: auto; padding-top: 8px; }
   .leadership-card__name { font-size: 1.3rem; }
 }
-
-.teams-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
-.team-card {
-  display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid var(--line); background: #fff;
-  position: relative; text-decoration: none; color: inherit; min-width: 0;
-}
-.team-card--add { color: #a39cab; background: repeating-linear-gradient(135deg, #faf8fb 0, #faf8fb 6px, #f4f0f7 6px, #f4f0f7 8px); }
-.team-card--add .team-card__icon { color: #b3abbe; }
-.team-card__icon { width: 26px; height: 26px; flex: none; color: var(--purple); }
-.team-card__icon svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: 1.6; fill: none; }
-.team-card__title { display: block; font-family: var(--ff-display); font-weight: 500; font-size: 1.1rem; letter-spacing: -.015em; overflow-wrap: anywhere; }
-.team-card__count { display: block; margin-top: 2px; font-family: var(--ff-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-.team-card__arrow { position: absolute; top: 14px; right: 14px; color: var(--purple); }
-.team-card__arrow svg { width: 17px; height: 17px; stroke: currentColor; stroke-width: 1.6; fill: none; }
-@media (max-width: 480px) { .teams-grid { gap: 8px; } .team-card { padding: 12px; gap: 8px; } .team-card__title { font-size: .92rem; } }
 
 .member-row { display: flex; align-items: center; gap: 14px; padding: 16px 2px; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; }
 .member-row__avatar { width: 46px; height: 46px; flex: none; border-radius: 50%; overflow: hidden; background: var(--wash, #f2edf6); display: grid; place-items: center; color: var(--muted); }

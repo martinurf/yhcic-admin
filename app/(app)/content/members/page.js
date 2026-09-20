@@ -5,13 +5,6 @@ import { requireActiveAdmin } from "@/lib/require-admin";
 import { mediaPublicUrl } from "@/lib/media-url";
 import ContentTopbar from "../content-topbar";
 
-const TEAM_ICONS = {
-  "Equity Research": <path d="M8 52h12V35H8ZM26 52h12V24H26ZM44 52h12V10H44Z" />,
-  Markets: <><circle cx="32" cy="32" r="24" /><path d="M8 32h48M32 8c8 8 8 40 0 48M32 8c-8 8-8 40 0 48" /></>,
-  Operations: <><circle cx="32" cy="32" r="8" /><path d="M32 10v6M32 48v6M10 32h6M48 32h6M16 16l4 4M44 44l4 4M48 16l-4 4M20 44l-4 4" /></>,
-  Communications: <path d="M8 12h48v30H24l-10 10V42H8Z" />,
-};
-
 function normalize(s) {
   return (s || "").trim().toLowerCase();
 }
@@ -40,106 +33,95 @@ export default async function MembersListPage() {
   const teamCounts = {};
   for (const m of all) if (m.team) teamCounts[m.team] = (teamCounts[m.team] || 0) + 1;
   const TEAMS = ["Equity Research", "Markets", "Operations", "Communications"];
+  const teamLabel = (n) => `${n} ${n === 1 ? "MEMBER" : "MEMBERS"}`;
 
   return (
     <>
       <ContentTopbar title="Member Network" pendingCount={pendingCount || 0} />
       <div className="container flush-top" style={{ paddingLeft: 0, paddingRight: 0 }}>
-        <section className="members-hero">
-          <img className="members-hero__art" src="/college-lineart.webp" alt="" aria-hidden="true" />
-          <h1>
-            <span>Built by</span>
-            <span>students.</span>
-          </h1>
-          <div className="hero-rule" />
-          <p className="sub">Investment club / 2026</p>
-          <div className="section-toolbar members-toolbar members-hero__leadership-row">
-            <h2>Leadership</h2>
-            <Link href="#all-members" className="text-btn">View all &rarr;</Link>
-          </div>
-        </section>
+        {/* Exact copy of member-network-blueprint.jpeg — same technique as
+            the Content hub: the reference's own index.html renders this
+            flat image with invisible/opaque overlays, not CSS. Positions
+            below are the reference's own overlay percentages, ported
+            verbatim (leader-avatar, count labels, member-replacement). */}
+        <div className="mn-hub" style={{ aspectRatio: "864/1300.4" }}>
+          <div className="mn-hub__inner" style={{ top: "-8.46%" }}>
+            <img src="/member-network-blueprint.jpeg" alt="Member Network — Leadership, Teams, All members" />
 
-        <div className="workspace">
-          {myMember ? (
-            <Link href={`/content/members/${myMember.id}`} className="leadership-card">
-              <span className="leadership-card__arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></svg>
-              </span>
-              <span className="leadership-card__photo">
-                {mediaPublicUrl(myMember.media?.storage_key) ? (
-                  <img src={mediaPublicUrl(myMember.media?.storage_key)} alt="" />
+            {myMember ? (
+              <>
+                <Link href={`/content/members/${myMember.id}`} className="mn-hit mn-hit--leadership" aria-label={`Open ${myMember.name}'s profile`} />
+                <span className="mn-avatar mn-avatar--leader">
+                  {mediaPublicUrl(myMember.media?.storage_key) ? (
+                    <img src={mediaPublicUrl(myMember.media?.storage_key)} alt="" />
+                  ) : (
+                    <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="29" r="14" /><path d="M15 73c1-19 11-29 25-29s24 10 25 29" /></svg>
+                  )}
+                </span>
+                <span className="mn-patch mn-patch--name"><span className="mn-name">{myMember.name}</span></span>
+                <span className="mn-patch mn-patch--role">
+                  {myMember.role ? <span className="mn-role">{myMember.role}</span> : <span className="mn-add">Add role</span>}
+                </span>
+                <span className="mn-patch mn-patch--major">
+                  {myMember.major ? <span className="mn-field">{myMember.major}</span> : <span className="mn-add">Add major</span>}
+                </span>
+                <span className="mn-patch mn-patch--class">
+                  {myMember.class_of ? <span className="mn-class">CLASS OF {myMember.class_of}</span> : <span className="mn-add">Add class year</span>}
+                </span>
+              </>
+            ) : null}
+
+            {TEAMS.map((team, i) => (
+              <Link key={team} href={`/content/members/team/${encodeURIComponent(team)}`} className={`mn-hit mn-hit--team mn-hit--team${i}`} aria-label={`Open ${team}`} />
+            ))}
+            <span className="mn-patch mn-count mn-count--equity">{teamLabel(teamCounts["Equity Research"] || 0)}</span>
+            <span className="mn-patch mn-count mn-count--markets">{teamLabel(teamCounts.Markets || 0)}</span>
+            <span className="mn-patch mn-count mn-count--operations">{teamLabel(teamCounts.Operations || 0)}</span>
+            <span className="mn-patch mn-count mn-count--communications">{teamLabel(teamCounts.Communications || 0)}</span>
+
+            {/* Opaque, like the reference's own .member-replacement — the
+                image underneath here is never meant to show through. */}
+            <div className="mn-all-members">
+              <header>
+                <h2>All members</h2>
+                <Link href="/content/members/new" className="mn-all-members__action">New member <span>&rarr;</span></Link>
+              </header>
+              <div className="mn-member-list">
+                {all.length ? (
+                  all.slice(0, 3).map((m) => {
+                    const sub = [m.major?.toUpperCase(), m.class_of ? `CLASS OF ${m.class_of}` : null].filter(Boolean).join("  /  ");
+                    return (
+                      <Link key={m.id} href={`/content/members/${m.id}`} className="mn-member-row">
+                        <span className="mn-avatar mn-avatar--row">
+                          {mediaPublicUrl(m.media?.storage_key) ? (
+                            <img src={mediaPublicUrl(m.media?.storage_key)} alt="" />
+                          ) : (
+                            <svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="29" r="14" /><path d="M15 73c1-19 11-29 25-29s24 10 25 29" /></svg>
+                          )}
+                        </span>
+                        <span className="mn-member-row__copy">
+                          <strong>{m.name}</strong>
+                          <small>{sub || "No details yet"}</small>
+                        </span>
+                        <span className="mn-member-row__arrow" aria-hidden="true">&rarr;</span>
+                      </Link>
+                    );
+                  })
                 ) : (
-                  <span className="leadership-card__photo-default" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" /></svg>
-                  </span>
+                  <p className="empty" style={{ padding: "24px 4%" }}><strong>No members yet</strong>Add the first officer.</p>
                 )}
-              </span>
-              <span className="leadership-card__content">
-                <span className="leadership-card__info">
-                  <span className="leadership-card__name">{myMember.name}</span>
-                  {myMember.role ? (
-                    <span className="leadership-card__role">{myMember.role}</span>
-                  ) : (
-                    <span className="leadership-card__add">Add role</span>
-                  )}
-                  <span className="leadership-card__field-label">Major</span>
-                  {myMember.major ? (
-                    <span className="leadership-card__field">{myMember.major}</span>
-                  ) : (
-                    <span className="leadership-card__add">Add major</span>
-                  )}
-                  {myMember.class_of ? (
-                    <span className="leadership-card__class">Class of {myMember.class_of}</span>
-                  ) : (
-                    <span className="leadership-card__add">Add class year</span>
-                  )}
-                </span>
-                <span className="leadership-card__tagline">
-                  <em>Students.</em>
-                  <em>Markets.</em>
-                  <em>A Stronger Tomorrow.</em>
-                </span>
-              </span>
-            </Link>
-          ) : (
-            <p className="empty"><strong>No members yet</strong>Add the first officer to get started.</p>
-          )}
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <div className="section-toolbar members-toolbar" style={{ marginTop: 32 }}>
-            <h2>Teams</h2>
-            <Link href="/content/members/new" className="text-btn">Join a team &rarr;</Link>
-          </div>
-          <div className="teams-grid">
-            {TEAMS.map((team) => {
-              const count = teamCounts[team] || 0;
-              return count ? (
-                <span key={team} className="team-card">
-                  <span className="team-card__icon" aria-hidden="true"><svg viewBox="0 0 64 64">{TEAM_ICONS[team]}</svg></span>
-                  <span>
-                    <span className="team-card__title">{team}</span>
-                    <span className="team-card__count">{count} member{count === 1 ? "" : "s"}</span>
-                  </span>
-                  <span className="team-card__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></svg></span>
-                </span>
-              ) : (
-                <span key={team} className="team-card team-card--add" aria-hidden="true">
-                  <span className="team-card__icon" aria-hidden="true"><svg viewBox="0 0 64 64">{TEAM_ICONS[team]}</svg></span>
-                  <span>
-                    <span className="team-card__title">{team}</span>
-                    <span className="team-card__count">Add</span>
-                  </span>
-                </span>
-              );
-            })}
-          </div>
-
-          <div id="all-members" className="section-toolbar members-toolbar" style={{ marginTop: 32, scrollMarginTop: 90 }}>
-            <h2>All members</h2>
-            <Link href="/content/members/new" className="text-btn">New member &rarr;</Link>
-          </div>
-          <div className="editorial-list">
-            {all.length ? (
-              all.map((m) => {
+        {all.length > 3 ? (
+          <div className="workspace" style={{ paddingTop: 0 }}>
+            <div className="section-toolbar members-toolbar" style={{ marginTop: 24 }}>
+              <h2>Full directory</h2>
+            </div>
+            <div className="editorial-list">
+              {all.map((m) => {
                 const sub = [m.major, m.class_of ? `Class of ${m.class_of}` : null].filter(Boolean).join(" / ");
                 return (
                   <Link key={m.id} href={`/content/members/${m.id}`} className="member-row">
@@ -157,12 +139,10 @@ export default async function MembersListPage() {
                     <span className="member-row__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg></span>
                   </Link>
                 );
-              })
-            ) : (
-              <p className="empty"><strong>No members yet</strong>Add the first officer to get started.</p>
-            )}
+              })}
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </>
   );
