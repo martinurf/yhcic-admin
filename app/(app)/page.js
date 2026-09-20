@@ -55,7 +55,7 @@ export default async function DashboardPage() {
           <p className="tile__eyebrow">Content</p>
           <h2 className="tile__title">Members</h2>
           <p className="tile__stat">
-            {memberCount} total <span className="muted">· {memberPublished} published</span>
+            <strong>{memberCount}</strong> total <span className="muted">· {memberPublished} published</span>
           </p>
           <span className="tile__arrow" aria-hidden="true">&rarr;</span>
         </Link>
@@ -64,7 +64,7 @@ export default async function DashboardPage() {
           <p className="tile__eyebrow">Membership</p>
           <h2 className="tile__title">Applications</h2>
           <p className="tile__stat">
-            {pending} pending
+            <strong>{pending}</strong> pending
             {(accepted || rejected) ? (
               <span className="muted"> · {accepted} accepted · {rejected} rejected</span>
             ) : null}

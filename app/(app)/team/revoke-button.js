@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { revokeInvite } from "./actions";
+import { removeInvite } from "./actions";
 
 export default function RevokeButton({ id }) {
   const router = useRouter();
@@ -11,7 +11,7 @@ export default function RevokeButton({ id }) {
   function onClick() {
     if (!confirm("Remove this invitation? The link will stop working.")) return;
     startTransition(async () => {
-      await revokeInvite(id);
+      await removeInvite(id);
       router.refresh();
     });
   }

@@ -46,7 +46,10 @@ html, body { overflow-x: hidden; }
 
 body {
   margin: 0;
-  background: var(--vault);
+  background:
+    radial-gradient(1100px 560px at 10% -12%, rgba(180, 143, 224, 0.10), transparent 60%),
+    radial-gradient(900px 520px at 100% 0%, rgba(120, 53, 159, 0.12), transparent 55%),
+    var(--vault);
   color: var(--vault-ink);
   font-family: var(--ff-ui);
   font-size: 15px;
@@ -75,13 +78,23 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 
 .side {
+  position: relative;
   border-right: 1px solid var(--vault-rule);
   padding: 24px 18px;
   display: flex;
   flex-direction: column;
   gap: 28px;
+  overflow: hidden;
+}
+.side::before {
+  content: "";
+  position: absolute; top: -90px; left: -70px;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(180, 143, 224, 0.18), transparent 70%);
+  pointer-events: none;
 }
 .side__mark {
+  position: relative;
   display: inline-flex;
   background: var(--purple-deep);
   color: #fff;
@@ -91,6 +104,11 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   letter-spacing: 0.05em;
   padding: 0.4em 0.6em;
   width: fit-content;
+  animation: markIn 0.6s var(--ease) both;
+}
+@keyframes markIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .side__meta {
   font-family: var(--ff-mono);
@@ -135,7 +153,19 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 
 .main { padding: 28px clamp(20px, 4vw, 48px) 60px; min-width: 0; }
 
-.page__head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+.page__head {
+  position: relative;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  margin-bottom: 28px; padding-bottom: 20px; flex-wrap: wrap;
+}
+.page__head::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: linear-gradient(90deg, var(--vault-accent), var(--vault-rule) 45%, transparent);
+  transform: scaleX(0); transform-origin: left;
+  animation: hairlineIn 0.8s var(--ease) 0.1s both;
+}
+@keyframes hairlineIn { to { transform: scaleX(1); } }
 .page__eyebrow { font-family: var(--ff-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--vault-accent); margin-bottom: 8px; }
 .page__title { font-family: var(--ff-display); font-weight: 500; font-size: clamp(24px, 3vw, 32px); }
 .page__title--mobile { display: none; }
@@ -154,7 +184,17 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   background: var(--vault-2);
   overflow: hidden;
   transition: border-color 0.25s var(--ease), background 0.25s var(--ease), transform 0.25s var(--ease);
+  animation: tileIn 0.5s var(--ease) both;
 }
+@keyframes tileIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.tiles .tile:nth-child(1) { animation-delay: 0.05s; }
+.tiles .tile:nth-child(2) { animation-delay: 0.1s; }
+.tiles .tile:nth-child(3) { animation-delay: 0.15s; }
+.tiles .tile:nth-child(4) { animation-delay: 0.2s; }
+.tiles .tile:nth-child(5) { animation-delay: 0.25s; }
 .tile::before {
   content: "";
   position: absolute; inset: 0 0 auto 0; height: 2px;
@@ -165,8 +205,9 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 a.tile:hover { border-color: var(--vault-rule-2); background: var(--vault-3); transform: translateY(-1px); }
 a.tile:hover::before { transform: scaleX(1); }
 .tile__eyebrow { font-family: var(--ff-mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--vault-accent); }
-.tile__title { font-family: var(--ff-display); font-weight: 500; font-size: 21px; margin-top: 2px; }
+.tile__title { font-family: var(--ff-display); font-weight: 500; font-size: 22px; margin-top: 2px; }
 .tile__stat { font-size: 12.5px; margin-top: auto; padding-top: 10px; }
+.tile__stat strong { font-family: var(--ff-mono); font-weight: 600; font-size: 15px; color: var(--vault-accent-2); }
 .tile__arrow {
   position: absolute; right: 18px; top: 20px;
   font-size: 15px; color: var(--vault-accent);
@@ -307,6 +348,7 @@ a.tile:hover .tile__arrow { opacity: 1; transform: translateX(0); }
   padding: 4px 8px; border-radius: var(--radius);
   border: 1px solid currentColor;
 }
+.badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 .badge--pending { color: var(--pending); }
 .badge--accepted { color: var(--pos); }
 .badge--rejected { color: var(--warn); }
@@ -326,11 +368,36 @@ a.tile:hover .tile__arrow { opacity: 1; transform: translateX(0); }
 .status-text[data-tone="err"] { color: var(--warn); }
 .status-text[data-tone="ok"] { color: var(--pos); }
 
-/* login screen only */
+/* login / join screens */
 .login {
+  position: relative;
   min-height: 100dvh; display: flex; align-items: center; justify-content: center;
   padding: var(--gut, 20px);
+  overflow: hidden;
 }
-.login__panel { width: min(380px, 100%); border: 1px solid var(--vault-rule); background: var(--vault-2); padding: 36px 30px; }
+.login::before {
+  content: "";
+  position: absolute; top: -220px; left: 50%; transform: translateX(-50%);
+  width: 760px; height: 520px;
+  background: radial-gradient(circle, rgba(180, 143, 224, 0.14), transparent 65%);
+  pointer-events: none;
+}
+.login__panel {
+  position: relative;
+  width: min(380px, 100%); border: 1px solid var(--vault-rule); background: var(--vault-2); padding: 36px 30px;
+  animation: panelIn 0.5s var(--ease) both;
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .login__title { font-family: var(--ff-display); font-weight: 500; font-size: 26px; margin-bottom: 6px; }
 .login__sub { font-size: 13px; color: var(--vault-mute); margin-bottom: 24px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .side__mark, .page__head::after, .tile, .login__panel {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

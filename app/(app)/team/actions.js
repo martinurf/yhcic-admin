@@ -40,18 +40,17 @@ export async function createInvite(formData) {
   return { ok: true, link, expiresAt };
 }
 
-export async function revokeInvite(id) {
+export async function removeInvite(id) {
   const admin = await requireActiveAdmin();
   if (!admin) return { error: "Not signed in." };
 
   const supabase = createAdminClient();
   const { error } = await supabase
     .from("invitations")
-    .update({ revoked_at: new Date().toISOString() })
+    .delete()
     .eq("id", id)
-    .is("accepted_at", null)
-    .is("revoked_at", null);
-  if (error) return { error: "Could not revoke the invitation." };
+    .is("accepted_at", null);
+  if (error) return { error: "Could not remove the invitation." };
 
   revalidatePath("/team");
   return { ok: true };
