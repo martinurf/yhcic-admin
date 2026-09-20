@@ -94,6 +94,21 @@ export default async function ContentHubPage() {
         </div>
       </div>
 
+      {/* The blueprint image only has 4 cards baked into its pixels —
+          Watchlist is new, so on mobile it appends as a real card
+          below the image instead of being reconstructed into it. */}
+      <div className="hub-grid hub-grid--mobile-extra">
+        <span className="hub-card disabled" aria-hidden="true">
+          <span className="hub-card__index">05</span>
+          <span className="hub-card__icon">
+            <svg viewBox="0 0 64 64"><path d="M4 32c8-15 19-22 28-22s20 7 28 22c-8 15-19 22-28 22S12 47 4 32Z" /><path d="M22 34l7-9 6 5 9-12" /><circle cx="44" cy="18" r="2.5" /></svg>
+          </span>
+          <h2>Watchlist</h2>
+          <p>Tickers the club is keeping an eye on (coming soon).</p>
+          <span className="hub-card__stat">Coming soon</span>
+        </span>
+      </div>
+
       <section className="content-hero">
         <img className="content-hero__art" src="/college-lineart.webp" alt="" aria-hidden="true" />
         <h1>
@@ -152,6 +167,16 @@ export default async function ContentHubPage() {
           </span>
           <h2>Portfolio</h2>
           <p>Showcase our best work (coming soon).</p>
+          <span className="hub-card__stat">Coming soon</span>
+        </span>
+
+        <span className="hub-card disabled" aria-hidden="true">
+          <span className="hub-card__index">05</span>
+          <span className="hub-card__icon">
+            <svg viewBox="0 0 64 64"><path d="M4 32c8-15 19-22 28-22s20 7 28 22c-8 15-19 22-28 22S12 47 4 32Z" /><path d="M22 34l7-9 6 5 9-12" /><circle cx="44" cy="18" r="2.5" /></svg>
+          </span>
+          <h2>Watchlist</h2>
+          <p>Tickers the club is keeping an eye on (coming soon).</p>
           <span className="hub-card__stat">Coming soon</span>
         </span>
       </div>

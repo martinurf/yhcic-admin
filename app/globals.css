@@ -101,7 +101,10 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   width: fit-content;
 }
 /* Exact values from the approved reference's .logo — not scaled down. */
-.side__mark--lg { min-width: 118px; padding: 13px 17px 11px; font-size: 1.75rem; letter-spacing: -0.045em; text-align: center; }
+/* Scaled up from the mobile blueprint's measured logo box (the only
+   ground truth we have — no desktop mockup exists), same proportions,
+   not the dead stylesheet's own desktop guess. */
+.side__mark--lg { min-width: 88px; padding: 7px 13px; font-size: 1.45rem; letter-spacing: -0.045em; text-align: center; }
 /* Measured directly off content-library-blueprint.jpeg pixels (the
    reference stylesheet's own mobile .logo rule was never actually used
    to render that mockup — it's a flat exported image — so its declared
@@ -634,7 +637,9 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 @media (max-width: 620px) { .content-hero__art { width: 56%; opacity: 0.18; } }
 .content-hero .eyebrow { margin: 0 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .22em; font-size: 12px; font-weight: 600; }
-.content-hero h1 { max-width: 620px; margin: 0; font-family: var(--ff-display); font-weight: 500; font-size: clamp(4.2rem, 12vw, 7rem); line-height: .84; letter-spacing: -.065em; }
+/* Continues the mobile-verified max (3.4rem @ 680px) smoothly upward —
+   scaled proportionally, since no desktop blueprint exists to measure. */
+.content-hero h1 { max-width: 620px; margin: 0; font-family: var(--ff-display); font-weight: 500; font-size: clamp(3.4rem, 5.8vw, 5.8rem); line-height: .84; letter-spacing: -.065em; }
 .content-hero h1 span { display: block; white-space: nowrap; }
 .content-hero .hero-rule { width: 60px; height: 2px; margin: 27px 0 17px; background: var(--purple); }
 .content-hero p.sub { margin: 0; color: var(--muted); text-transform: uppercase; letter-spacing: .25em; font-size: 12px; font-weight: 600; }
@@ -659,7 +664,8 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .hub-card__arrow svg { width: 28px; height: 28px; stroke: currentColor; stroke-width: 1.5; fill: none; }
 .hub-card__icon { width: 58px; height: 58px; margin: 27px 0 17px; color: var(--purple); flex: none; }
 .hub-card__icon svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: 1.45; fill: none; }
-.hub-card h2 { max-width: 100%; margin: 0 0 11px; font-family: var(--ff-display); font-weight: 500; font-size: clamp(1.75rem, 4.7vw, 2.45rem); line-height: 1; letter-spacing: -.048em; overflow-wrap: anywhere; }
+/* Continues the mobile-verified max (2.6rem @ 680px) smoothly upward. */
+.hub-card h2 { max-width: 100%; margin: 0 0 11px; font-family: var(--ff-display); font-weight: 500; font-size: clamp(2.6rem, 3.2vw, 3.3rem); line-height: 1; letter-spacing: -.048em; overflow-wrap: anywhere; }
 .hub-card p { max-width: 270px; margin: 0; color: var(--muted); font-size: 14.9px; line-height: 1.48; }
 .hub-card__stat { margin-top: auto; padding-top: 18px; color: var(--purple); text-transform: uppercase; letter-spacing: .25em; font-size: 11.2px; font-weight: 700; }
 .hub-card.disabled { color: #8b8590; pointer-events: none; background: repeating-linear-gradient(135deg, #faf8fb 0, #faf8fb 6px, #f4f0f7 6px, #f4f0f7 8px); }
@@ -707,8 +713,15 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
    rules above — same specificity, so cascade order decides, and this
    display:none needs to win at mobile widths. */
 .blueprint-hub { display: none; }
+/* Watchlist (05) isn't in the blueprint image — this duplicate grid
+   holds just that one card, hidden on desktop (the real .hub-grid
+   above already includes it there) and shown only on mobile, right
+   under the image. */
+.hub-grid--mobile-extra { display: none; }
 @media (max-width: 680px) {
   .content-hero, .hub-grid, .continue-band { display: none; }
+  .hub-grid--mobile-extra { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; padding: 16px 12px 21px; }
+  .hub-grid--mobile-extra .hub-card { grid-column: 1 / -1; }
   .blueprint-hub { display: block; position: relative; width: 100%; overflow: hidden; }
   .blueprint-hub__inner { position: absolute; left: 0; width: 100%; aspect-ratio: 864 / 1536; }
   .blueprint-hub__inner img { width: 100%; height: 100%; display: block; }
