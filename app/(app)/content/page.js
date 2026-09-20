@@ -64,6 +64,36 @@ export default async function ContentHubPage() {
     <>
       <ContentTopbar title="Content Library" pendingCount={pendingCount || 0} />
     <div className="container flush-top" style={{ paddingLeft: 0, paddingRight: 0 }}>
+      <div
+        className="blueprint-hub"
+        style={{ aspectRatio: continueItem ? "864/1299" : "864/1115" }}
+      >
+        <div
+          className="blueprint-hub__inner"
+          style={{ top: continueItem ? "-8.468%" : "-9.865%" }}
+        >
+          <img src="/content-library-blueprint.jpeg" alt="Content Library — Projects, Announcements, Sources & Research, Portfolio coming soon" />
+          {!pendingCount ? <span className="blueprint-bell-mask" aria-hidden="true" /> : null}
+
+          <Link href="/content/projects" className="blueprint-hit blueprint-hit--projects" aria-label="Open Projects" />
+          <Link href="/content/announcements" className="blueprint-hit blueprint-hit--announcements" aria-label="Open Announcements" />
+          <Link href="/content/sources" className="blueprint-hit blueprint-hit--sources" aria-label="Open Sources and Research" />
+          <span className="blueprint-hit blueprint-hit--portfolio" aria-hidden="true" />
+
+          <span className="blueprint-stat blueprint-stat--01">{projectCount || 0} active</span>
+          <span className="blueprint-stat blueprint-stat--02">{announcementPublished || 0} published</span>
+          <span className="blueprint-stat blueprint-stat--03">{sourceCount || 0} sources</span>
+
+          {continueItem ? (
+            <>
+              <Link href={continueItem.href} className="blueprint-hit blueprint-hit--continue" aria-label={`Continue editing ${continueItem.title}`} />
+              <span className="blueprint-continue-title">{continueItem.title}</span>
+              <span className="blueprint-continue-meta">{continueItem.kind} &middot; Draft</span>
+            </>
+          ) : null}
+        </div>
+      </div>
+
       <section className="content-hero">
         <img className="content-hero__art" src="/college-lineart.webp" alt="" aria-hidden="true" />
         <h1>
@@ -118,7 +148,7 @@ export default async function ContentHubPage() {
         <span className="hub-card disabled" aria-hidden="true">
           <span className="hub-card__index">04</span>
           <span className="hub-card__icon">
-            <svg viewBox="0 0 64 64"><path d="M8 52h12V35H8ZM26 52h12V24H26ZM44 52h12V10H44Z" /><rect x="43" y="37" width="17" height="16" rx="2" /><path d="M47 37v-5a5 5 0 0 1 10 0v5" /></svg>
+            <svg viewBox="0 0 64 64"><path d="M8 52h13V33H8ZM27 52h13V14H27Z" /><rect x="42" y="34" width="16" height="14" rx="2" /><path d="M46 34v-5a5 5 0 0 1 10 0v5" /></svg>
           </span>
           <h2>Portfolio</h2>
           <p>Showcase our best work (coming soon).</p>

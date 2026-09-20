@@ -53,11 +53,7 @@ export default async function DashboardPage() {
       <header className="hero">
         <img className="college-art" src="/college-lineart.webp" alt="" aria-hidden="true" />
         <div className="topbar">
-          <div className="monogram" aria-label="YHCIC">
-            YHC
-            <br />
-            IC
-          </div>
+          <span className="side__mark side__mark--lg">YHCIC</span>
           <HeroActions pendingCount={pending} />
         </div>
         <p className="hero-aside" aria-hidden="true">
