@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "./actions";
-import Nav from "./nav";
-
-const SOON = ["Announcements", "Projects", "Goals"];
+import { MenuProvider } from "./menu-context";
+import Nav, { PageMenuButton } from "./nav";
+import MenuSheet from "./menu-sheet";
 
 export default async function AppLayout({ children }) {
   const supabase = await createClient();
@@ -11,20 +11,21 @@ export default async function AppLayout({ children }) {
   } = await supabase.auth.getUser();
 
   let profile = null;
-  let pendingCount = 0;
   if (user) {
-    const [{ data }, { count }] = await Promise.all([
-      supabase.from("admin_profiles").select("username, display_name").eq("id", user.id).maybeSingle(),
-      supabase.from("applications").select("id", { count: "exact", head: true }).eq("status", "pending"),
-    ]);
+    const { data } = await supabase.from("admin_profiles").select("username, display_name").eq("id", user.id).maybeSingle();
     profile = data;
-    pendingCount = count ?? 0;
   }
 
   return (
     <div className="shell">
-      <main className="main">{children}</main>
-      <Nav soon={SOON} profile={profile} onSignOut={signOut} pendingCount={pendingCount} />
+      <MenuProvider>
+        <div className="app">
+          <main className="main">{children}</main>
+          <PageMenuButton />
+        </div>
+        <Nav />
+        <MenuSheet profile={profile} onSignOut={signOut} />
+      </MenuProvider>
     </div>
   );
 }

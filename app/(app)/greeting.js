@@ -11,7 +11,7 @@ function greetingFor(hour) {
 /* Client-only: the server's clock isn't the viewer's clock. Renders
    a neutral "Welcome" on first paint (matches the server) and swaps
    to the real time-of-day greeting right after mount. */
-export default function Greeting({ name, className = "page__title" }) {
+export default function Greeting({ name, className }) {
   const [text, setText] = useState("Welcome");
 
   useEffect(() => {
@@ -20,7 +20,8 @@ export default function Greeting({ name, className = "page__title" }) {
 
   return (
     <h1 className={className}>
-      {text}, {name}
+      {text},<br />
+      {name}
     </h1>
   );
 }
