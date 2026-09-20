@@ -1,16 +1,15 @@
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "./actions";
-import NavLink from "./nav-link";
-import MobileNav from "./mobile-nav";
+import Nav from "./nav";
 
 const NAV = [
   { href: "/", label: "Dashboard" },
   { href: "/applications", label: "Applications" },
+  { href: "/content/members", label: "Members" },
+  { href: "/team", label: "Team" },
   { href: "/content/announcements", label: "Announcements", disabled: true },
   { href: "/content/projects", label: "Projects", disabled: true },
   { href: "/content/goals", label: "Goals", disabled: true },
-  { href: "/content/members", label: "Members" },
-  { href: "/team", label: "Team" },
 ];
 
 export default async function AppLayout({ children }) {
@@ -31,33 +30,7 @@ export default async function AppLayout({ children }) {
 
   return (
     <div className="shell">
-      <MobileNav nav={NAV} profile={profile} onSignOut={signOut} />
-
-      <aside className="side">
-        <span className="side__mark">YHCIC</span>
-        <p className="side__meta">Admin panel</p>
-
-        <nav className="side__nav">
-          {NAV.map((item) => (
-            <NavLink key={item.href} href={item.href} disabled={item.disabled}>
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="side__foot">
-          <hr className="hair" style={{ margin: "0 0 14px" }} />
-          <p className="side__who">
-            Signed in as <b>{profile?.display_name || profile?.username || "—"}</b>
-          </p>
-          <form action={signOut}>
-            <button className="btn btn--sm" type="submit" style={{ width: "100%" }}>
-              Sign out
-            </button>
-          </form>
-        </div>
-      </aside>
-
+      <Nav items={NAV} profile={profile} onSignOut={signOut} />
       <main className="main">{children}</main>
     </div>
   );

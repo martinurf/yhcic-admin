@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import Greeting from "./greeting";
 
 async function countRows(supabase, table, filters = {}) {
   let query = supabase.from(table).select("id", { count: "exact", head: true });
@@ -8,11 +9,7 @@ async function countRows(supabase, table, filters = {}) {
   return count ?? 0;
 }
 
-const SOON_TILES = [
-  { key: "announcements", title: "Announcements", eyebrow: "Content" },
-  { key: "projects", title: "Projects", eyebrow: "Content" },
-  { key: "goals", title: "Goals", eyebrow: "Content" },
-];
+const SOON = ["Announcements", "Projects", "Goals"];
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -30,7 +27,7 @@ export default async function DashboardPage() {
       .maybeSingle();
     profile = data;
   }
-  const firstName = (profile?.display_name || profile?.username || "").split(" ")[0];
+  const firstName = (profile?.display_name || profile?.username || "officer").split(" ")[0];
 
   const [pending, accepted, rejected, memberCount, memberPublished] = await Promise.all([
     countRows(supabase, "applications", { status: "pending" }),
@@ -45,40 +42,37 @@ export default async function DashboardPage() {
       <div className="page__head">
         <div>
           <p className="page__eyebrow">Overview</p>
-          <h1 className="page__title page__title--desktop">Dashboard</h1>
-          <h1 className="page__title page__title--mobile">Welcome, {firstName || "officer"}</h1>
+          <Greeting name={firstName} />
         </div>
       </div>
 
-      <div className="tiles">
-        <Link href="/content/members" className="tile">
-          <p className="tile__eyebrow">Content</p>
-          <h2 className="tile__title">Members</h2>
-          <p className="tile__stat">
-            <strong>{memberCount}</strong> total <span className="muted">· {memberPublished} published</span>
+      <div className="spread">
+        <Link href="/content/members" className="feature">
+          <p className="feature__eyebrow">Content</p>
+          <h2 className="feature__title">Members</h2>
+          <p className="feature__number">{memberCount}</p>
+          <p className="feature__desc">
+            on the roster &mdash; {memberPublished} published to the public site.
           </p>
-          <span className="tile__arrow" aria-hidden="true">&rarr;</span>
+          <span className="feature__link">View members &rarr;</span>
         </Link>
 
-        <Link href="/applications" className="tile">
-          <p className="tile__eyebrow">Membership</p>
-          <h2 className="tile__title">Applications</h2>
-          <p className="tile__stat">
-            <strong>{pending}</strong> pending
-            {(accepted || rejected) ? (
-              <span className="muted"> · {accepted} accepted · {rejected} rejected</span>
-            ) : null}
+        <Link href="/applications" className="feature">
+          <p className="feature__eyebrow">Membership</p>
+          <h2 className="feature__title">Applications</h2>
+          <p className="feature__number">{pending}</p>
+          <p className="feature__desc">
+            waiting on a decision &mdash; {accepted} accepted, {rejected} rejected all-time.
           </p>
-          <span className="tile__arrow" aria-hidden="true">&rarr;</span>
+          <span className="feature__link">Review applications &rarr;</span>
         </Link>
+      </div>
 
-        {SOON_TILES.map((t) => (
-          <div key={t.key} className="tile tile--soon">
-            <p className="tile__eyebrow">{t.eyebrow}</p>
-            <h2 className="tile__title">{t.title}</h2>
-            <p className="tile__stat muted">Coming soon</p>
-            <span className="tile__soon">Soon</span>
-          </div>
+      <div className="ticker">
+        {SOON.map((label) => (
+          <span key={label} className="ticker__item">
+            {label} <b>Soon</b>
+          </span>
         ))}
       </div>
     </div>
