@@ -33,12 +33,24 @@ export default function AnnouncementForm({ announcement, imageUrl }) {
     if (!file) return;
     setError(null);
     setRemoveImage(false);
+
+    /* iPhones save photos as HEIC by default, which no browser can
+       decode — catch it up front with a message that says what to do,
+       instead of the generic "could not read that image" a failed
+       Image() decode would otherwise produce. */
+    const looksHeic = /heic|heif/i.test(file.type) || /\.hei[cf]$/i.test(file.name);
+    if (looksHeic) {
+      setError('That looks like an iPhone HEIC photo — browsers can\'t read those. In Photos, tap Share, then "Options" and switch the format to JPEG before sharing it here (or take a screenshot instead).');
+      e.target.value = "";
+      return;
+    }
+
     try {
       const dims = await readImageDimensions(file);
       setImageDims(dims);
       setPreview(URL.createObjectURL(file));
     } catch {
-      setError("Could not read that image. Try a different file.");
+      setError("Could not read that image — it may be a format browsers can't decode. Try a JPEG or PNG.");
       e.target.value = "";
     }
   }
@@ -105,7 +117,7 @@ export default function AnnouncementForm({ announcement, imageUrl }) {
             </button>
           </div>
         ) : null}
-        <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" onChange={onImageChange} />
+        <input id="image" name="image" type="file" accept="image/*" onChange={onImageChange} />
         <p className="fld__hint">JPEG, PNG, or WebP — up to 8MB. Shows in place of the YHCIC mark wherever this announcement appears.</p>
       </div>
 
