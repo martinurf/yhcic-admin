@@ -17,7 +17,7 @@ export default async function ApplicationsPage({ searchParams }) {
   const { data: applications } = await query;
 
   return (
-    <div>
+    <div className="container">
       <div className="page__head">
         <div>
           <p className="page__eyebrow">Membership</p>

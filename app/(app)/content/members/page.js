@@ -10,7 +10,7 @@ export default async function MembersListPage() {
     .order("sort_order", { ascending: true });
 
   return (
-    <div>
+    <div className="container">
       <div className="page__head">
         <div>
           <p className="page__eyebrow">Content</p>

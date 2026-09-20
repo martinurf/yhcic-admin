@@ -1,6 +1,6 @@
 export default function DisabledSection({ title }) {
   return (
-    <div>
+    <div className="container">
       <div className="page__head">
         <div>
           <p className="page__eyebrow">Content</p>

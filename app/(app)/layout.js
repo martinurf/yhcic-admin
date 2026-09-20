@@ -2,15 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOut } from "./actions";
 import Nav from "./nav";
 
-const NAV = [
-  { href: "/", label: "Dashboard" },
-  { href: "/applications", label: "Applications" },
-  { href: "/content/members", label: "Members" },
-  { href: "/team", label: "Team" },
-  { href: "/content/announcements", label: "Announcements", disabled: true },
-  { href: "/content/projects", label: "Projects", disabled: true },
-  { href: "/content/goals", label: "Goals", disabled: true },
-];
+const SOON = ["Announcements", "Projects", "Goals"];
 
 export default async function AppLayout({ children }) {
   const supabase = await createClient();
@@ -19,19 +11,20 @@ export default async function AppLayout({ children }) {
   } = await supabase.auth.getUser();
 
   let profile = null;
+  let pendingCount = 0;
   if (user) {
-    const { data } = await supabase
-      .from("admin_profiles")
-      .select("username, display_name")
-      .eq("id", user.id)
-      .maybeSingle();
+    const [{ data }, { count }] = await Promise.all([
+      supabase.from("admin_profiles").select("username, display_name").eq("id", user.id).maybeSingle(),
+      supabase.from("applications").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    ]);
     profile = data;
+    pendingCount = count ?? 0;
   }
 
   return (
     <div className="shell">
-      <Nav items={NAV} profile={profile} onSignOut={signOut} />
       <main className="main">{children}</main>
+      <Nav soon={SOON} profile={profile} onSignOut={signOut} pendingCount={pendingCount} />
     </div>
   );
 }

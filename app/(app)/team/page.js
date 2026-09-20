@@ -22,7 +22,7 @@ export default async function TeamPage() {
   ]);
 
   return (
-    <div>
+    <div className="container">
       <div className="page__head">
         <div>
           <p className="page__eyebrow">Access</p>

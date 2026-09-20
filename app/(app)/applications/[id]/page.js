@@ -27,7 +27,7 @@ export default async function ApplicationDetail({ params }) {
   ];
 
   return (
-    <div>
+    <div className="container">
       <p className="page__eyebrow">
         <Link href="/applications" className="muted">&larr; Applications</Link>
       </p>

@@ -16,7 +16,7 @@ export default async function EditMemberPage({ params }) {
   if (!member) notFound();
 
   return (
-    <div>
+    <div className="container">
       <p className="page__eyebrow"><Link href="/content/members" className="muted">&larr; Members</Link></p>
       <h1 className="page__title" style={{ marginBottom: 24 }}>Edit member</h1>
       <div className="panel" style={{ padding: 22, maxWidth: 560 }}>
