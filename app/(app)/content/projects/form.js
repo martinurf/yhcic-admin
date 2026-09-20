@@ -127,6 +127,11 @@ export default function ProjectForm({ project, imageUrl }) {
       </div>
 
       <div className="fld">
+        <label htmlFor="notes">Notes <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional — sourcing, open questions, assumptions</em></label>
+        <textarea id="notes" name="notes" rows={4} defaultValue={project?.notes || ""} placeholder="Stays internal — never shown if this project publishes." />
+      </div>
+
+      <div className="fld">
         <label htmlFor="image">Image <em style={{ fontStyle: "normal", opacity: 0.6 }}>optional — cover photo, chart, mockup</em></label>
         {preview && !removeImage ? (
           <div style={{ marginBottom: 8 }}>

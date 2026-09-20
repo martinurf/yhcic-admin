@@ -18,6 +18,7 @@ export async function saveProject(id, formData) {
     status: String(formData.get("status") || "").trim(),
     code: String(formData.get("code") || "").trim() || null,
     body: String(formData.get("body") || "").trim(),
+    notes: String(formData.get("notes") || "").trim() || null,
     is_private: isPrivate,
   };
   if (!data.title || !data.status || !data.body) return { error: "Title, status, and body are required." };
