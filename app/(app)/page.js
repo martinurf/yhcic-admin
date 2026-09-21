@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { mediaPublicUrl } from "@/lib/media-url";
 import Greeting from "./greeting";
 import HeroActions from "./hero-actions";
+import InstallNudge from "./install-nudge";
 
 async function countRows(supabase, table, filters = {}, excludeDeleted = false) {
   let query = supabase.from(table).select("id", { count: "exact", head: true });
@@ -79,6 +80,8 @@ export default async function DashboardPage() {
           </div>
         </div>
       </header>
+
+      <InstallNudge />
 
       <section className="summary" aria-label="Club overview">
         <Link href="/applications?status=pending" className="metric">

@@ -1,4 +1,5 @@
 import "./globals.css";
+import ServiceWorkerRegister from "./sw-register";
 
 export const metadata = {
   // Without this, Next.js resolves relative URLs (the OG image, most
@@ -38,7 +39,10 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&family=Inter:wght@400;500;600&display=swap"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ServiceWorkerRegister />
+      </body>
     </html>
   );
 }

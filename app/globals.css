@@ -395,8 +395,12 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .sheet__soon { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; color: var(--muted); font-size: 16px; border-top: 1px solid var(--line); }
 .sheet__soon:first-of-type { border-top: 0; }
 .sheet__soon b { font-family: var(--ff-ui); font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); padding: 3px 7px; }
-.sheet__link { display: block; width: 100%; padding: 13px 0; font-size: 16px; color: var(--ink); border: 0; border-top: 1px solid var(--line); background: transparent; text-align: left; font-family: inherit; cursor: pointer; }
+.sheet__link { display: flex; align-items: center; gap: 13px; width: 100%; padding: 13px 0; font-size: 16px; color: var(--ink); border: 0; border-top: 1px solid var(--line); background: transparent; text-align: left; font-family: inherit; cursor: pointer; }
 .sheet__link:hover { color: var(--purple); }
+.sheet__link:hover .sheet__link__icon { color: var(--purple); background: var(--wash, #f2edf6); }
+.sheet__link__icon { flex: none; width: 30px; height: 30px; border-radius: 50%; background: #f6f3f9; color: var(--muted); display: grid; place-items: center; transition: color .2s ease, background .2s ease; }
+.sheet__link__icon svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.7; fill: none; }
+.sheet__badge { margin-left: auto; padding: 3px 9px; border-radius: 999px; background: var(--purple); color: #fff; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 
 /* ---------- Get the app: iOS "Add to Home Screen" walkthrough ---------- */
 .get-app-lede { margin: 4px 0 22px; color: var(--muted); font-size: 15px; line-height: 1.55; }
@@ -409,6 +413,13 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .get-app-step__copy strong { font-family: var(--ff-display); font-weight: 500; font-size: 1rem; }
 .get-app-step__copy small { color: var(--muted); font-size: .82rem; line-height: 1.4; }
 .get-app-note { margin: 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; }
+
+.install-nudge { display: flex; align-items: center; gap: 12px; margin: 0 clamp(20px,4vw,43px) 22px; padding: 14px 16px; border: 1px solid var(--rule-2, var(--line)); border-radius: 4px; background: var(--wash, #f8f6fb); }
+.install-nudge p { flex: 1; margin: 0; font-size: 13.5px; line-height: 1.4; color: var(--ink); }
+.install-nudge__actions { display: flex; align-items: center; gap: 10px; flex: none; }
+.install-nudge__cta { border: 0; background: none; padding: 0; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--purple); cursor: pointer; white-space: nowrap; }
+.install-nudge__dismiss { border: 0; background: none; padding: 4px; font-size: 18px; line-height: 1; color: var(--muted); cursor: pointer; }
+@media (max-width: 480px) { .install-nudge { margin: 0 20px 18px; flex-wrap: wrap; } }
 .sheet__foot { margin-top: 14px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .sheet__who { font-size: 14px; color: var(--muted); }
 .sheet__who b { color: var(--ink); font-weight: 600; }

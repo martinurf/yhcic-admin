@@ -24,9 +24,18 @@ export default function ResourceRow({ resource, comments, originTitle, canEdit }
   const [error, setError] = useState(null);
 
   function onDownload() {
+    // Opening the tab has to happen synchronously in the click handler —
+    // Safari on iOS no longer counts it as user-initiated once a await
+    // (the server action round-trip) comes first, and silently leaves
+    // the new tab blank instead of navigating it. Open it immediately,
+    // point it at the real URL once the signed link comes back.
+    const win = window.open("", "_blank");
     startTransition(async () => {
       const res = await getDownloadUrl(resource.storage_key);
-      if (res?.url) window.open(res.url, "_blank", "noopener");
+      if (win) {
+        if (res?.url) win.location.href = res.url;
+        else win.close();
+      }
     });
   }
 

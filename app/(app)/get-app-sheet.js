@@ -26,13 +26,13 @@ const STEPS = [
   },
 ];
 
-export default function GetAppSheet({ className }) {
+export default function GetAppSheet({ className, children }) {
   const dialogRef = useRef(null);
 
   return (
     <>
       <button type="button" className={className} onClick={() => dialogRef.current?.showModal()}>
-        Get the app
+        {children ?? "Get the app"}
       </button>
       <dialog ref={dialogRef} className="editor-dialog">
         <div className="editor-shell">
