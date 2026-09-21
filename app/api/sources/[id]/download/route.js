@@ -18,7 +18,7 @@ export async function GET(request, { params }) {
 
   const { data: resource } = await admin
     .from("resources")
-    .select("storage_key")
+    .select("storage_key, file_name")
     .eq("id", id)
     .is("deleted_at", null)
     .maybeSingle();
@@ -27,7 +27,16 @@ export async function GET(request, { params }) {
     return NextResponse.redirect(new URL("/content/sources?error=missing-file", request.url));
   }
 
-  const { data, error } = await admin.storage.from("resources").createSignedUrl(resource.storage_key, 60);
+  /* Without `download`, Supabase serves the file inline with whatever
+     content-type it inferred — a .txt note opened this way isn't a
+     "page", it's the browser's raw plain-text viewer, which in dark
+     mode is just white text on a black rectangle. `download` adds a
+     Content-Disposition: attachment header instead, so the browser
+     saves the file like a normal download rather than navigating to
+     display it. */
+  const { data, error } = await admin.storage
+    .from("resources")
+    .createSignedUrl(resource.storage_key, 60, { download: resource.file_name || true });
   if (error || !data) {
     return NextResponse.redirect(new URL("/content/sources?error=download-failed", request.url));
   }
