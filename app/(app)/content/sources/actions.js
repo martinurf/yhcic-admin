@@ -137,14 +137,3 @@ export async function deleteResource(id, storageKey) {
   revalidatePath("/content/sources");
   return { ok: true };
 }
-
-export async function getDownloadUrl(storageKey) {
-  const admin = await requireActiveAdmin();
-  if (!admin) return { error: "Not signed in." };
-
-  const supabase = createAdminClient();
-  const { data, error } = await supabase.storage.from("resources").createSignedUrl(storageKey, 60);
-  if (error || !data) return { error: "Could not create a download link." };
-
-  return { ok: true, url: data.signedUrl };
-}

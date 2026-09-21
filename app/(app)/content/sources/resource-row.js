@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { deleteResource, getDownloadUrl, updateResource, forkResource } from "./actions";
+import { deleteResource, updateResource, forkResource } from "./actions";
 import { postComment } from "@/lib/comments";
 
 function formatSize(bytes) {
@@ -22,22 +22,6 @@ export default function ResourceRow({ resource, comments, originTitle, canEdit }
   const [threadOpen, setThreadOpen] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [error, setError] = useState(null);
-
-  function onDownload() {
-    // Opening the tab has to happen synchronously in the click handler —
-    // Safari on iOS no longer counts it as user-initiated once a await
-    // (the server action round-trip) comes first, and silently leaves
-    // the new tab blank instead of navigating it. Open it immediately,
-    // point it at the real URL once the signed link comes back.
-    const win = window.open("", "_blank");
-    startTransition(async () => {
-      const res = await getDownloadUrl(resource.storage_key);
-      if (win) {
-        if (res?.url) win.location.href = res.url;
-        else win.close();
-      }
-    });
-  }
 
   function onDelete() {
     if (!confirm("Remove this? It stays recoverable — this is a soft delete.")) return;
@@ -76,7 +60,7 @@ export default function ResourceRow({ resource, comments, originTitle, canEdit }
     });
   }
 
-  const openLink = resource.url ? () => window.open(resource.url, "_blank", "noopener") : onDownload;
+  const openHref = resource.url || `/api/sources/${resource.id}/download`;
   const sub = [
     resource.url ? new URL(resource.url).hostname.replace(/^www\./, "") : resource.file_name,
     resource.file_size ? formatSize(resource.file_size) : null,
@@ -154,9 +138,9 @@ export default function ResourceRow({ resource, comments, originTitle, canEdit }
           </div>
         ) : null}
       </div>
-      <button type="button" className="source-link" disabled={pending} onClick={openLink} aria-label={`Open ${resource.title}`}>
+      <a href={openHref} target="_blank" rel="noopener" className="source-link" aria-label={`Open ${resource.title}`}>
         <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" /></svg>
-      </button>
+      </a>
     </article>
   );
 }
