@@ -8,7 +8,7 @@ export default function ContentTopbar({ title, pendingCount = 0 }) {
 
   return (
     <header className="section-topbar">
-      <span className="side__mark side__mark--lg">YHCIC</span>
+      <Link href="/" className="side__mark side__mark--lg" aria-label="Home">YHCIC</Link>
       <span className="section-topbar__title">{title}</span>
       <div className="section-topbar__actions">
         <Link href="/applications?status=pending" className="icon-btn" aria-label="Pending applications">
