@@ -49,6 +49,8 @@ export default async function MembersListPage() {
           <div className="mn-hub__inner" style={{ top: "-8.46%" }}>
             <img src="/member-network-blueprint.jpeg" alt="Member Network — Leadership, Teams, All members" />
 
+            <Link href="/content/members/directory" className="mn-hit mn-hit--viewall" aria-label="View all members" />
+
             {myMember ? (
               <>
                 <Link href={`/content/members/${myMember.id}`} className="mn-hit mn-hit--leadership" aria-label={`Open ${myMember.name}'s profile`} />

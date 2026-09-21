@@ -274,6 +274,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .announcements-head { display: flex; align-items: center; justify-content: space-between; padding: 19px 25px; border-bottom: 1px solid var(--line); }
 .announcements-head h2 { font-size: 36px; }
 .announcement-item { display: grid; grid-template-columns: 82px 1fr 24px; gap: 18px; align-items: start; padding: 25px; }
+.announcement-item + .announcement-item { border-top: 1px solid var(--line); }
 .announcement-item .round-icon { width: 70px; height: 70px; font-size: 17px; }
 .announcement-item .round-icon svg { width: 32px; height: 32px; }
 .announcement-titleline { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
@@ -394,8 +395,20 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .sheet__soon { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; color: var(--muted); font-size: 16px; border-top: 1px solid var(--line); }
 .sheet__soon:first-of-type { border-top: 0; }
 .sheet__soon b { font-family: var(--ff-ui); font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); padding: 3px 7px; }
-.sheet__link { display: block; padding: 13px 0; font-size: 16px; color: var(--ink); border-top: 1px solid var(--line); }
+.sheet__link { display: block; width: 100%; padding: 13px 0; font-size: 16px; color: var(--ink); border: 0; border-top: 1px solid var(--line); background: transparent; text-align: left; font-family: inherit; cursor: pointer; }
 .sheet__link:hover { color: var(--purple); }
+
+/* ---------- Get the app: iOS "Add to Home Screen" walkthrough ---------- */
+.get-app-lede { margin: 4px 0 22px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+.get-app-steps { display: flex; flex-direction: column; gap: 18px; margin: 0 0 20px; padding: 0; }
+.get-app-step { display: grid; grid-template-columns: 24px 40px 1fr; align-items: center; gap: 14px; }
+.get-app-step__num { font-family: var(--ff-mono); font-size: 12px; color: var(--muted); }
+.get-app-step__icon { width: 40px; height: 40px; border-radius: 50%; background: var(--wash, #f2edf6); display: grid; place-items: center; color: var(--purple); flex: none; }
+.get-app-step__icon svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+.get-app-step__copy { display: flex; flex-direction: column; gap: 2px; }
+.get-app-step__copy strong { font-family: var(--ff-display); font-weight: 500; font-size: 1rem; }
+.get-app-step__copy small { color: var(--muted); font-size: .82rem; line-height: 1.4; }
+.get-app-note { margin: 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; }
 .sheet__foot { margin-top: 14px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .sheet__who { font-size: 14px; color: var(--muted); }
 .sheet__who b { color: var(--ink); font-weight: 600; }
@@ -733,13 +746,17 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
      reuses .content-hero too, but has no blueprint image to swap in
      for it, so its hero must stay visible at this width. */
   .hub-page .content-hero, .hub-page .hub-grid, .hub-page .continue-band { display: none; }
-  .hub-grid.hub-grid--mobile-extra { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; padding: 16px 12px 21px; }
-  /* "Watchlist" is one unbreakable word, unlike "Sources & Research" —
-     let it break rather than force the card wide to fit it. */
-  /* Smaller than the standard mobile hub-card h2 — "Watchlist" (one
-     unbreakable word, wide W) was wrapping to 2 lines at that size,
-     which "Portfolio" doesn't hit despite being the same length. */
-  .hub-grid--mobile-extra .hub-card h2 { font-size: clamp(1.5rem, 8vw, 2rem); overflow-wrap: anywhere; }
+  /* Full width, not the 2-column grid the real cards use below — a lone
+     card next to empty space read as orphaned/off-design. Full-bleed
+     matches the continue-band treatment right below it instead. */
+  .hub-grid.hub-grid--mobile-extra { display: grid; grid-template-columns: 1fr; gap: 10px; padding: 16px 12px 21px; }
+  .hub-grid--mobile-extra .hub-card { flex-direction: row; align-items: center; gap: 16px; min-height: 0; }
+  .hub-grid--mobile-extra .hub-card__icon { margin: 0; }
+  .hub-grid--mobile-extra .hub-card__index { position: absolute; top: 15px; left: 15px; }
+  .hub-grid--mobile-extra .hub-card__copy { min-width: 0; }
+  .hub-grid--mobile-extra .hub-card h2 { margin: 0 0 3px; font-size: clamp(1.6rem, 7vw, 2rem); line-height: 1.05; }
+  .hub-grid--mobile-extra .hub-card p { max-width: none; font-size: 12px; }
+  .hub-grid--mobile-extra .hub-card__stat { margin: 0 0 0 auto; padding: 0; align-self: center; flex: none; white-space: nowrap; }
   .blueprint-hub { display: block; position: relative; width: 100%; overflow: hidden; }
   .blueprint-hub__inner { position: absolute; left: 0; width: 100%; aspect-ratio: 864 / 1536; }
   .blueprint-hub__inner img { width: 100%; height: 100%; display: block; }
@@ -794,6 +811,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
    a plain <button> carries default OS chrome (white fill, border)
    that was showing as a blank box over the baked "JOIN A TEAM" text. */
 .mn-hit { position: absolute; z-index: 6; display: block; border: 0; background: transparent; padding: 0; margin: 0; cursor: pointer; }
+.mn-hit--viewall { left: 74%; top: 28.4%; width: 22.6%; height: 3%; z-index: 7; }
 .mn-hit--leadership { left: 3.7%; top: 31.9%; width: 92.8%; height: 18.8%; }
 .mn-hit--team0 { left: 3.7%; top: 55%; width: 45.6%; height: 6.8%; }
 .mn-hit--team1 { left: 50.8%; top: 55%; width: 45.7%; height: 6.8%; }
@@ -876,6 +894,23 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   .leadership-card__name { font-size: 1.3rem; }
 }
 
+/* ---------- Panel Members: "View all" next to Leadership on the
+   Members hub. Title bar on top (ContentTopbar) + two columns below
+   split by publish status — the shape Martín asked for. ---------- */
+.panel-columns { display: grid; grid-template-columns: minmax(0,1fr) 1px minmax(0,1fr); gap: 14px; align-items: start; padding: 24px 0 60px; }
+.panel-columns__divider { align-self: stretch; background: var(--line); }
+.panel-column__count { font-family: var(--ff-mono); font-size: 13px; color: var(--muted); }
+.panel-column .member-row { gap: 8px; padding: 12px 0; }
+.panel-column .member-row__avatar { width: 34px; height: 34px; }
+.panel-column .member-row__name { font-size: .92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.panel-column .member-row__sub { font-size: .58rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.panel-column .member-row__arrow svg { width: 14px; height: 14px; }
+@media (max-width: 480px) {
+  .panel-columns { gap: 10px; padding: 20px 0 50px; }
+  .panel-columns .section-toolbar { margin-bottom: 12px; }
+  .panel-columns .section-toolbar h2 { font-size: 1.05rem; letter-spacing: -.02em; }
+  .panel-column__count { font-size: 11px; }
+}
 .member-row { display: flex; align-items: center; gap: 14px; padding: 16px 2px; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; }
 .member-row__avatar { width: 46px; height: 46px; flex: none; border-radius: 50%; overflow: hidden; background: var(--wash, #f2edf6); display: grid; place-items: center; color: var(--muted); }
 .member-row__avatar img { width: 100%; height: 100%; object-fit: cover; }

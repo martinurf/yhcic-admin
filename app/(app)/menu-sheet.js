@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useMenu } from "./menu-context";
+import GetAppSheet from "./get-app-sheet";
 
 export default function MenuSheet({ profile, onSignOut, isOwner = false }) {
   const { open, setOpen } = useMenu();
@@ -42,6 +43,7 @@ export default function MenuSheet({ profile, onSignOut, isOwner = false }) {
             Requests
           </Link>
         ) : null}
+        <GetAppSheet className="sheet__link" />
 
         <div className="sheet__foot">
           <p className="sheet__who">

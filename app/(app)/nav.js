@@ -67,7 +67,7 @@ export default function Nav() {
    which has no topbar of its own) carry ContentTopbar with the same
    trigger built in. Either one paired with this floating button would
    just be a second hamburger on the same screen. */
-const HAS_OWN_TOPBAR = [/^\/content$/, /^\/content\/projects/, /^\/content\/announcements/, /^\/content\/sources/];
+const HAS_OWN_TOPBAR = [/^\/content$/, /^\/content\/projects/, /^\/content\/announcements/, /^\/content\/sources/, /^\/content\/members$/, /^\/content\/members\/team/, /^\/content\/members\/directory/];
 export function PageMenuButton() {
   const pathname = usePathname();
   const { setOpen } = useMenu();

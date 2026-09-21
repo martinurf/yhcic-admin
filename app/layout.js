@@ -8,6 +8,16 @@ export const metadata = {
   title: "YHCIC — Sign in",
   description: "Young Harris College Investment Club — officer admin panel.",
   robots: { index: false, follow: false },
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [{ url: "/icon-512.png", sizes: "512x512", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "YHCIC Panel",
+  },
 };
 
 export const viewport = {

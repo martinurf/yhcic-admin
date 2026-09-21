@@ -27,7 +27,7 @@ export default async function DashboardPage() {
   const displayName = profile?.display_name || profile?.username || "officer";
   const firstName = displayName.split(" ")[0];
 
-  const [pending, memberCount, projectCount, announcementCount, { data: recentApplications }, { data: recentAnnouncement }] = await Promise.all([
+  const [pending, memberCount, projectCount, announcementCount, { data: recentApplications }, { data: recentAnnouncements }] = await Promise.all([
     countRows(supabase, "applications", { status: "pending" }),
     countRows(supabase, "members", {}, true),
     countRows(supabase, "projects", {}, true),
@@ -44,8 +44,7 @@ export default async function DashboardPage() {
       .eq("published", true)
       .is("deleted_at", null)
       .order("published_at", { ascending: false })
-      .limit(1)
-      .maybeSingle(),
+      .limit(2),
   ]);
 
   return (
@@ -75,7 +74,7 @@ export default async function DashboardPage() {
               <span>&#65291;</span>New announcement
             </Link>
             <span className="primary-action primary-action--disabled" aria-hidden="true">
-              <span>&#65291;</span>Watchlist <em>Coming soon</em>
+              <span>&#65291;</span>Stock Watchlist <em>Coming soon</em>
             </span>
           </div>
         </div>
@@ -152,30 +151,32 @@ export default async function DashboardPage() {
               View all &rarr;
             </Link>
           </div>
-          {recentAnnouncement ? (
-            <Link href={`/content/announcements/${recentAnnouncement.id}`} className="announcement-item">
-              {/* Always the official mark here — it's what says "this is
-                  an official YHCIC announcement." An uploaded photo is
-                  content, not identity; it shows inside the full post,
-                  never in place of this. */}
-              <div className="announcement-item__mark" aria-hidden="true">
-                <span className="side__mark">YHCIC</span>
-              </div>
-              <div>
-                <div className="announcement-titleline">
-                  <h3>{recentAnnouncement.title}</h3>
-                  <span className="published-badge">Published</span>
+          {recentAnnouncements?.length ? (
+            recentAnnouncements.map((recentAnnouncement) => (
+              <Link key={recentAnnouncement.id} href={`/content/announcements/${recentAnnouncement.id}`} className="announcement-item">
+                {/* Always the official mark here — it's what says "this is
+                    an official YHCIC announcement." An uploaded photo is
+                    content, not identity; it shows inside the full post,
+                    never in place of this. */}
+                <div className="announcement-item__mark" aria-hidden="true">
+                  <span className="side__mark">YHCIC</span>
                 </div>
-                <p className="announcement-meta">
-                  YHCIC &middot; {new Date(recentAnnouncement.published_at).toLocaleDateString()}
-                </p>
-                <p className="announcement-copy">{recentAnnouncement.body}</p>
-              </div>
-              <span className="chevron">&rsaquo;</span>
-              {mediaPublicUrl(recentAnnouncement.media?.storage_key) ? (
-                <img className="announcement-item__photo" src={mediaPublicUrl(recentAnnouncement.media?.storage_key)} alt="" />
-              ) : null}
-            </Link>
+                <div>
+                  <div className="announcement-titleline">
+                    <h3>{recentAnnouncement.title}</h3>
+                    <span className="published-badge">Published</span>
+                  </div>
+                  <p className="announcement-meta">
+                    YHCIC &middot; {new Date(recentAnnouncement.published_at).toLocaleDateString()}
+                  </p>
+                  <p className="announcement-copy">{recentAnnouncement.body}</p>
+                </div>
+                <span className="chevron">&rsaquo;</span>
+                {mediaPublicUrl(recentAnnouncement.media?.storage_key) ? (
+                  <img className="announcement-item__photo" src={mediaPublicUrl(recentAnnouncement.media?.storage_key)} alt="" />
+                ) : null}
+              </Link>
+            ))
           ) : (
             <div className="announcement-empty">No announcements yet.</div>
           )}

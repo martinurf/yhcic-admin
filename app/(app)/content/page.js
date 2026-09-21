@@ -103,8 +103,10 @@ export default async function ContentHubPage() {
           <span className="hub-card__icon">
             <svg viewBox="0 0 64 64"><path d="M4 32c8-15 19-22 28-22s20 7 28 22c-8 15-19 22-28 22S12 47 4 32Z" /><path d="M22 34l7-9 6 5 9-12" /><circle cx="44" cy="18" r="2.5" /></svg>
           </span>
-          <h2>Watchlist</h2>
-          <p>Tickers the club is keeping an eye on (coming soon).</p>
+          <span className="hub-card__copy">
+            <h2>Stock Watchlist</h2>
+            <p>Tickers the club is keeping an eye on.</p>
+          </span>
           <span className="hub-card__stat">Coming soon</span>
         </span>
       </div>
@@ -175,7 +177,7 @@ export default async function ContentHubPage() {
           <span className="hub-card__icon">
             <svg viewBox="0 0 64 64"><path d="M4 32c8-15 19-22 28-22s20 7 28 22c-8 15-19 22-28 22S12 47 4 32Z" /><path d="M22 34l7-9 6 5 9-12" /><circle cx="44" cy="18" r="2.5" /></svg>
           </span>
-          <h2>Watchlist</h2>
+          <h2>Stock Watchlist</h2>
           <p>Tickers the club is keeping an eye on (coming soon).</p>
           <span className="hub-card__stat">Coming soon</span>
         </span>
