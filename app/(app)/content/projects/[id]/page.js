@@ -59,7 +59,7 @@ export default async function EditProjectPage({ params }) {
         parentId={id}
         forks={forks}
         comments={comments}
-        forkHref={(forkId) => `/content/projects/${forkId}`}
+        forkHrefBase="/content/projects"
         canFork={Boolean(me)}
         forkAction={forkProject.bind(null, id)}
       />

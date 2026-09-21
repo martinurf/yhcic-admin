@@ -13,7 +13,7 @@ function when(ts) {
   return new Date(ts).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-export default function Thread({ parentTable, parentId, forks, comments, forkHref, canFork, forkAction }) {
+export default function Thread({ parentTable, parentId, forks, comments, forkHrefBase, canFork, forkAction }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [text, setText] = useState("");
@@ -70,7 +70,7 @@ export default function Thread({ parentTable, parentId, forks, comments, forkHre
               </div>
               {e.kind === "fork" ? (
                 <p style={{ marginTop: 8 }}>
-                  Made a copy: <Link href={forkHref(e.id)}>{e.title}</Link>
+                  Made a copy: <Link href={`${forkHrefBase}/${e.id}`}>{e.title}</Link>
                 </p>
               ) : (
                 <p style={{ marginTop: 8 }}>{e.body}</p>
