@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { deleteResource, updateResource, forkResource } from "./actions";
@@ -62,7 +63,7 @@ export default function ResourceRow({ resource, comments, originTitle, canEdit }
 
   const openHref = resource.url || `/api/sources/${resource.id}/download`;
   const sub = [
-    resource.url ? new URL(resource.url).hostname.replace(/^www\./, "") : resource.file_name,
+    resource.file_name,
     resource.file_size ? formatSize(resource.file_size) : null,
     new Date(resource.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
   ].filter(Boolean).join(" · ");
@@ -107,8 +108,12 @@ export default function ResourceRow({ resource, comments, originTitle, canEdit }
     <article className="source-card" data-source-card>
       <div className="source-type">{resource.type || "NOTE"}</div>
       <div>
-        <h3>{resource.title}</h3>
-        <p>{resource.description || sub}</p>
+        <h3><Link href={`/content/sources/${resource.id}`} style={{ color: "inherit", textDecoration: "none" }}>{resource.title}</Link></h3>
+        {resource.description ? <p className="source-card__why">{resource.description}</p> : null}
+        {resource.url ? (
+          <a href={resource.url} target="_blank" rel="noopener" className="source-card__url">{resource.url}</a>
+        ) : null}
+        {sub ? <p className="source-card__meta-line">{sub}</p> : null}
         {originTitle ? <p className="fld__hint" style={{ marginTop: 4 }}>A copy of {originTitle}</p> : null}
         <div className="meta">
           <span>{authorName(resource.uploader)}</span>

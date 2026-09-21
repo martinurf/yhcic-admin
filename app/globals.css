@@ -504,6 +504,10 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .source-type { width: 54px; height: 54px; display: grid; place-items: center; color: var(--purple); background: #f2ecf6; font-size: .62rem; font-weight: 700; letter-spacing: .04em; }
 .source-card h3 { margin: 0 0 6px; font-family: var(--ff-display); font-weight: 500; font-size: 1.35rem; line-height: 1.1; letter-spacing: -.025em; overflow-wrap: anywhere; }
 .source-card p { margin: 0; color: var(--muted); font-size: .86rem; line-height: 1.48; }
+.source-card__why { color: var(--ink); margin-bottom: 6px !important; }
+.source-card__url { display: block; margin: 0 0 6px; color: var(--purple); font-size: .8rem; font-family: var(--ff-mono); word-break: break-all; text-decoration: none; }
+.source-card__url:hover { text-decoration: underline; }
+.source-card__meta-line { color: var(--muted); font-size: .78rem !important; text-transform: uppercase; letter-spacing: .08em; }
 .source-link { width: 30px; height: 30px; border: 0; background: transparent; color: var(--purple); cursor: pointer; text-decoration: none; display: grid; place-items: center; }
 .source-link svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 1.6; fill: none; }
 @media (max-width: 620px) { .source-card { grid-template-columns: 50px minmax(0,1fr) 26px; gap: 13px; } .source-type { width: 48px; height: 48px; font-size: .55rem; } }
