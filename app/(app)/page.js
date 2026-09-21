@@ -70,9 +70,14 @@ export default async function DashboardPage() {
           <Greeting name={firstName} />
           <p className="motto">Students. Ideas. Impact.</p>
           <div className="small-rule" />
-          <Link href="/content/announcements/new" className="primary-action">
-            <span>&#65291;</span>New announcement
-          </Link>
+          <div className="hero-actions-row">
+            <Link href="/content/announcements/new" className="primary-action">
+              <span>&#65291;</span>New announcement
+            </Link>
+            <span className="primary-action primary-action--disabled" aria-hidden="true">
+              <span>&#65291;</span>Watchlist <em>Coming soon</em>
+            </span>
+          </div>
         </div>
       </header>
 

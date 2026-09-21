@@ -218,6 +218,9 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 }
 .primary-action:hover { background: rgba(255, 255, 255, 0.14); border-color: #fff; }
 .primary-action span { font-size: 22px; font-weight: 300; margin-right: 13px; vertical-align: -1px; }
+.hero-actions-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.primary-action--disabled { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.55); cursor: not-allowed; }
+.primary-action--disabled em { display: block; margin-top: 2px; font-style: normal; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
 
 /* ---------- home: summary strip ---------- */
 .summary {
@@ -727,7 +730,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
      reuses .content-hero too, but has no blueprint image to swap in
      for it, so its hero must stay visible at this width. */
   .hub-page .content-hero, .hub-page .hub-grid, .hub-page .continue-band { display: none; }
-  .hub-grid--mobile-extra { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; padding: 16px 12px 21px; }
+  .hub-grid.hub-grid--mobile-extra { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; padding: 16px 12px 21px; }
   /* "Watchlist" is one unbreakable word, unlike "Sources & Research" —
      let it break rather than force the card wide to fit it. */
   .hub-grid--mobile-extra .hub-card h2 { overflow-wrap: anywhere; }
@@ -779,6 +782,7 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
 .mn-hit--team1 { left: 50.8%; top: 55%; width: 45.7%; height: 6.8%; }
 .mn-hit--team2 { left: 3.7%; top: 62.6%; width: 45.6%; height: 6.8%; }
 .mn-hit--team3 { left: 50.8%; top: 62.6%; width: 45.7%; height: 6.8%; }
+.mn-hit--jointeam { left: 65%; top: 51.5%; width: 33%; height: 4.5%; }
 .mn-avatar { position: absolute; z-index: 4; background: #f0edf3; display: grid; place-items: center; color: #9b94a3; border: 1px solid #dad5df; overflow: hidden; }
 .mn-avatar svg { width: 54%; height: 54%; fill: none; stroke: currentColor; stroke-width: 2.6; }
 .mn-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }

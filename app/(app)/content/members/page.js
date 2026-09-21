@@ -71,6 +71,9 @@ export default async function MembersListPage() {
               </>
             ) : null}
 
+            {myMember ? (
+              <Link href={`/content/members/${myMember.id}?edit=1`} className="mn-hit mn-hit--jointeam" aria-label="Set your team" />
+            ) : null}
             {TEAMS.map((team, i) => (
               <Link key={team} href={`/content/members/team/${encodeURIComponent(team)}`} className={`mn-hit mn-hit--team mn-hit--team${i}`} aria-label={`Open ${team}`} />
             ))}
