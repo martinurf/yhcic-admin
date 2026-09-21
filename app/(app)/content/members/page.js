@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireActiveAdmin } from "@/lib/require-admin";
 import { mediaPublicUrl } from "@/lib/media-url";
 import ContentTopbar from "../content-topbar";
+import JoinTeamButton from "./join-team-button";
 
 function normalize(s) {
   return (s || "").trim().toLowerCase();
@@ -72,7 +73,7 @@ export default async function MembersListPage() {
             ) : null}
 
             {myMember ? (
-              <Link href={`/content/members/${myMember.id}?edit=1`} className="mn-hit mn-hit--jointeam" aria-label="Set your team" />
+              <JoinTeamButton className="mn-hit mn-hit--jointeam" memberId={myMember.id} currentTeam={myMember.team} />
             ) : null}
             {TEAMS.map((team, i) => (
               <Link key={team} href={`/content/members/team/${encodeURIComponent(team)}`} className={`mn-hit mn-hit--team mn-hit--team${i}`} aria-label={`Open ${team}`} />

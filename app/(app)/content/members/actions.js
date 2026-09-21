@@ -37,6 +37,19 @@ export async function saveMember(id, formData) {
   return saveContent(TABLE, id, data, PATH);
 }
 
+const TEAMS = ["Equity Research", "Markets", "Operations", "Communications"];
+
+/* "Join a team" is just this one field — no reason to send someone
+   through the full edit form (photo, role, major, everything) to set
+   it. */
+export async function setMyTeam(memberId, team) {
+  const me = await requireActiveAdmin();
+  if (!me) return { error: "Not signed in." };
+  if (!TEAMS.includes(team)) return { error: "Not a real team." };
+
+  return saveContent(TABLE, memberId, { team }, PATH);
+}
+
 export async function deleteMember(id) {
   return softDeleteContent(TABLE, id, PATH);
 }
